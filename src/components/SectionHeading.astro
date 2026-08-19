@@ -1,0 +1,31 @@
+---
+/** Cabecera de sección: eyebrow + título con degradado + entradilla. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  /** Parte del título a resaltar con degradado (debe ser un fragmento de `title`). */
+  highlight?: string;
+  lead?: string;
+  align?: "center" | "left";
+  as?: "h1" | "h2";
+  class?: string;
+}
+
+const { eyebrow, title, highlight, lead, align = "center", as: Tag = "h2", class: className } = Astro.props;
+
+let before = title;
+let after = "";
+if (highlight && title.includes(highlight)) {
+  const i = title.indexOf(highlight);
+  before = title.slice(0, i);
+  after = title.slice(i + highlight.length);
+}
+---
+
+<hgroup class:list={["max-w-3xl", align === "center" ? "text-center mx-auto" : "text-left", className]}>
+  {eyebrow && <p class:list={["eyebrow mb-4", align === "center" && "justify-center"]}>{eyebrow}</p>}
+  <Tag>
+    {before}{highlight && title.includes(highlight) && <span class="text-gradient">{highlight}</span>}{after}
+  </Tag>
+  {lead && <p class="lead mt-4">{lead}</p>}
+</hgroup>

@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/MainLayout.astro";
+import PersonaCard from "../../../components/card/PersonaCard.astro";
+import SectionHeading from "../../../components/SectionHeading.astro";
+import CtaBand from "../../../components/CtaBand.astro";
+import { LOCALES, type Locale, useTranslations } from "../../../i18n/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+const t = useTranslations(lang);
+
+const todas = (await getCollection("candidatura")).sort((a, b) => a.data.order - b.data.order);
+const junta = todas.filter((p) => p.data.featured);
+const resto = todas.filter((p) => !p.data.featured);
+const titulo = t("candidatura.titulo");
+---
+
+<Layout title={titulo} description={t("candidatura.intro")}>
+  <section class="section pb-10">
+    <div class="container">
+      <SectionHeading
+        as="h1"
+        eyebrow={`${todas.length} ${lang === "eu" ? "pertsona" : "personas"}`}
+        title={titulo}
+        highlight={titulo.split(" ").slice(-1)[0]}
+        lead={t("candidatura.intro")}
+      />
+    </div>
+  </section>
+
+  <section class="pb-16 lg:pb-24">
+    <div class="container">
+      <div class="flex items-end justify-between gap-4 mb-8">
+        <h2 class="mb-0 text-2xl sm:text-3xl">{t("candidatura.junta")}</h2>
+        <span class="text-sm text-slate-500">{junta.length}</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {junta.map((persona, i) => <PersonaCard persona={persona} lang={lang} destacada={i === 0} />)}
+      </div>
+
+      <div class="flex items-end justify-between gap-4 mt-20 mb-8">
+        <h2 class="mb-0 text-2xl sm:text-3xl">{t("candidatura.vocalias")}</h2>
+        <span class="text-sm text-slate-500">{resto.length}</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
+        {resto.map((persona) => <PersonaCard persona={persona} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Layout>

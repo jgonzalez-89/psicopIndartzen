@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import SectionHeading from "../SectionHeading.astro";
+import AmbitoCard from "../card/AmbitoCard.astro";
+import { getLocaleFromUrl, useTranslations } from "../../i18n/ui";
+
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const ambitos = (await getCollection("ambitos", (e) => e.data.lang === lang)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const titulo = t("ambitos.titulo");
+---
+
+<section class="section relative isolate bg-brand-50/60">
+  <div aria-hidden="true" class="absolute inset-0 bg-dots opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"></div>
+  <div class="container relative">
+    <SectionHeading eyebrow={t("nav.ambitos")} title={titulo} highlight={titulo.split(" ").slice(-1)[0]} lead={t("ambitos.intro")} />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mt-12 max-w-5xl mx-auto">
+      {ambitos.map((a) => <AmbitoCard ambito={a} lang={lang} />)}
+    </div>
+  </div>
+</section>

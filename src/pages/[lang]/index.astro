@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/MainLayout.astro";
+import Hero from "../../components/homepage/Hero.astro";
+import Manifiesto from "../../components/homepage/Manifiesto.astro";
+import Ambitos from "../../components/homepage/Ambitos.astro";
+import Candidatura from "../../components/homepage/Candidatura.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import { LOCALES, type Locale } from "../../i18n/ui";
+import { SITE, SITE_NAME } from "../../consts";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+---
+
+<Layout title={SITE_NAME} description={SITE[lang].description}>
+  <Hero />
+  <Manifiesto />
+  <Ambitos />
+  <Candidatura />
+  <CtaBand />
+</Layout>

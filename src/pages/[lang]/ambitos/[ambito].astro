@@ -1,0 +1,104 @@
+---
+import { getCollection, render } from "astro:content";
+import { ChevronLeft } from "@lucide/astro";
+import Layout from "../../../layouts/MainLayout.astro";
+import PersonaCard from "../../../components/card/PersonaCard.astro";
+import AmbitoIcon from "../../../components/AmbitoIcon.astro";
+import { LOCALES, type Locale, path, useTranslations } from "../../../i18n/ui";
+
+export async function getStaticPaths() {
+  const ambitos = await getCollection("ambitos");
+  return ambitos.map((entry) => ({
+    params: { lang: entry.data.lang, ambito: entry.data.key },
+    props: { entry },
+  }));
+}
+
+const lang = Astro.params.lang as Locale;
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const t = useTranslations(lang);
+
+const todas = await getCollection("candidatura");
+const personas = entry.data.personas
+  .map((slug) => todas.find((p) => p.id === slug))
+  .filter((p) => p !== undefined)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const otros = (await getCollection("ambitos", (e) => e.data.lang === lang && e.data.key !== entry.data.key)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout title={entry.data.title} description={entry.data.description}>
+  <!-- Cabecera del ámbito -->
+  <section class="relative isolate pt-12 pb-16 lg:pt-16 lg:pb-24 overflow-hidden">
+    <div aria-hidden="true" class="absolute inset-0 -z-10 bg-[linear-gradient(125deg,var(--color-brand-900),var(--color-brand-500))]"></div>
+    <div aria-hidden="true" class="absolute -right-20 -top-20 w-96 h-96 rounded-full bg-brand-400/40 blur-3xl"></div>
+    <div aria-hidden="true" class="absolute right-10 bottom-0 text-white/10 pointer-events-none">
+      <AmbitoIcon ambito={entry.data.key} size={260} />
+    </div>
+    <div class="container relative text-white">
+      <a href={path(lang, "ambitos")} class="inline-flex items-center gap-1 text-sm font-semibold text-white/80 hover:text-white mb-8">
+        <ChevronLeft size={18} />{t("cta.volver")}
+      </a>
+      <div class="flex items-start gap-5">
+        <span class="grid place-items-center w-16 h-16 rounded-2xl bg-white/15 backdrop-blur text-white shrink-0">
+          <AmbitoIcon ambito={entry.data.key} size={32} />
+        </span>
+        <div>
+          <h1 class="text-white mb-3">{entry.data.title}</h1>
+          <p class="text-lg sm:text-xl text-white/85 max-w-2xl">{entry.data.description}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 lg:gap-16 items-start">
+        <div class="page text-lg max-w-3xl [&_p:first-child]:text-xl [&_p:first-child]:text-brand-900 [&_p:first-child]:font-medium">
+          <Content />
+        </div>
+        <aside class="lg:sticky lg:top-28">
+          <div class="card-soft p-6">
+            <h2 class="text-base uppercase tracking-widest mb-4">{t("nav.ambitos")}</h2>
+            <ul class="grid gap-2 list-none pl-0">
+              {
+                otros.map((a) => (
+                  <li>
+                    <a
+                      href={path(lang, "ambitos", a.data.key)}
+                      class="group flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-brand-50"
+                    >
+                      <span class="grid place-items-center w-9 h-9 rounded-lg bg-brand-50 text-brand-500 group-hover:bg-white">
+                        <AmbitoIcon ambito={a.data.key} size={18} />
+                      </span>
+                      <span class="font-medium text-slate-700 group-hover:text-brand-900">{a.data.title}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      {
+        personas.length > 0 && (
+          <div class="mt-20">
+            <div class="flex items-end justify-between gap-4 mb-8">
+              <h2 class="mb-0 text-2xl sm:text-3xl">{t("candidatura.enEsteAmbito")}</h2>
+              <span class="text-sm text-slate-500">{personas.length}</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6">
+              {personas.map((persona) => (
+                <PersonaCard persona={persona} lang={lang} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Layout>

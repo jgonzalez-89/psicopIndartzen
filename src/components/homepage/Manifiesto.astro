@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from "astro:content";
+import { Eye, Award, HeartHandshake, Clock } from "@lucide/astro";
+import SectionHeading from "../SectionHeading.astro";
+import { getLocaleFromUrl } from "../../i18n/ui";
+
+const lang = getLocaleFromUrl(Astro.url);
+const [entry] = await getCollection("paginas", (e) => e.data.lang === lang && e.data.key === "manifiesto");
+const { Content } = entry ? await render(entry) : { Content: null };
+
+const copy = {
+  es: {
+    eyebrow: "Manifiesto",
+    pilares: [
+      { icon: Eye, title: "Transparencia", text: "Información clara y decisiones explicadas a las personas colegiadas." },
+      { icon: Award, title: "Profesionalidad", text: "Rigor y experiencia en todas las especialidades de la Psicología." },
+      { icon: HeartHandshake, title: "Cercanía", text: "Un Colegio que escucha y en el que todas las voces cuentan." },
+      { icon: Clock, title: "Atención continuada", text: "Acompañamiento en cada momento de la carrera profesional." },
+    ],
+  },
+  eu: {
+    eyebrow: "Manifestua",
+    pilares: [
+      { icon: Eye, title: "Gardentasuna", text: "Informazio argia eta erabaki azalduak elkargokideentzat." },
+      { icon: Award, title: "Profesionaltasuna", text: "Zorroztasuna eta esperientzia Psikologiaren espezialitate guztietan." },
+      { icon: HeartHandshake, title: "Hurbiltasuna", text: "Entzuten duen Elkargoa, ahots guztiek balio duten lekua." },
+      { icon: Clock, title: "Etengabeko arreta", text: "Laguntza ibilbide profesionalaren une bakoitzean." },
+    ],
+  },
+}[lang];
+---
+
+{
+  entry && (
+    <section class="section relative">
+      <div class="container">
+        <SectionHeading eyebrow={copy.eyebrow} title={entry.data.title} highlight={entry.data.title.split(" ").slice(-1)[0]} />
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-12">
+          {copy.pilares.map(({ icon: Icon, title, text }, i) => (
+            <div class="card-soft card-lift p-5 sm:p-7">
+              <span
+                class:list={[
+                  "grid place-items-center w-12 h-12 rounded-2xl mb-4",
+                  i % 2 === 0 ? "bg-brand-50 text-brand-500" : "bg-accent-green/10 text-accent-green-dark",
+                ]}
+              >
+                <Icon size={24} />
+              </span>
+              <h3 class="text-lg sm:text-xl mb-1">{title}</h3>
+              <p class="text-sm sm:text-base text-slate-600">{text}</p>
+            </div>
+          ))}
+        </div>
+
+        <article class="relative mt-10 rounded-[2rem] overflow-hidden bg-brand-900 text-white p-8 sm:p-12 lg:p-16 shadow-brand-lg">
+          <div aria-hidden="true" class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-brand-400/30 blur-3xl" />
+          <div aria-hidden="true" class="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-accent-orange/20 blur-3xl" />
+          <div class="relative prose-dark max-w-3xl mx-auto">
+            <Content />
+          </div>
+        </article>
+      </div>
+    </section>
+  )
+}

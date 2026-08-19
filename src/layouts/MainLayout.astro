@@ -1,37 +1,46 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import Drawer from "../components/Drawer.astro";
-import SVG from "../components/SVG.astro";
+import { getLocaleFromUrl } from "../i18n/ui";
 
-type Props = CollectionEntry<"blog">["data"];
+interface Props {
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+}
 
 const { title, description, image } = Astro.props;
-
+const lang = getLocaleFromUrl(Astro.url);
 ---
 
-<html lang="en">
+<html lang={lang === "eu" ? "eu" : "es"}>
   <head>
     <BaseHead title={title} description={description} image={image} />
   </head>
 
-  <body>
+  <body class="bg-white">
     <div class="drawer">
-      <input id="my-drawer-2" type="checkbox" class="drawer-toggle" title="Toggle navigation menu"/>
+      <input id="my-drawer-2" type="checkbox" class="drawer-toggle" title="Menu" />
       <div class="drawer-content flex flex-col h-full">
-        <!-- Page content here -->
-        <div
-          class="flex flex-col flex-1 bg-[linear-gradient(125deg,#F2FAFF,#FFFFFF_50%)]  bg-no-repeat bg-size-[900px_900px]  dark:bg-size-[0_0] bg-top-left"
-        >
+        <div class="relative isolate flex flex-col flex-1 overflow-x-clip">
+          <!-- Fondo decorativo: degradado suave + manchas de color de marca. -->
+          <div
+            aria-hidden="true"
+            class="absolute inset-x-0 top-0 h-[900px] -z-10 bg-[radial-gradient(ellipse_at_top_left,var(--color-brand-50),transparent_60%)]"
+          >
+          </div>
+          <div aria-hidden="true" class="blob blob-drift top-[-120px] right-[-160px] w-[520px] h-[520px] bg-brand-100/70"></div>
+          <div aria-hidden="true" class="blob blob-drift top-[420px] left-[-220px] w-[460px] h-[460px] bg-accent-green-light/15" style="animation-delay:-9s;animation-duration:26s"></div>
+
           <Header />
           <main class="flex-1">
             <slot />
           </main>
         </div>
         <Footer />
-		<SVG />
       </div>
       <Drawer />
     </div>

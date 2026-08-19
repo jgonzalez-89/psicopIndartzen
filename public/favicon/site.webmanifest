@@ -1,11 +1,14 @@
 {
-  "name": "HealNet",
-  "short_name": "HealNet",
-  "start_url": "/",
-  "description": "Experience personalized medical care from the comfort of your home.",
-  "display_override": ["window-control-overlay", "minimal-ui"],
+  "name": "PsiCopIndartzen",
+  "short_name": "PsiCopIndartzen",
+  "start_url": "/es/",
+  "description": "Candidatura a la Junta de Gobierno del Colegio Oficial de Psicología de Bizkaia 2026.",
+  "display_override": [
+    "window-control-overlay",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
-  "theme_color": "#ffffff",
+  "theme_color": "#073B6C",
   "background_color": "#ffffff",
   "display": "standalone",
   "icons": [
@@ -28,30 +31,5 @@
       "purpose": "any"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/SEO/screen1.jpg",
-      "type": "image/jpg",
-      "sizes": "720x1280",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/SEO/screen2.jpg",
-      "type": "image/jpg",
-      "sizes": "720x1280",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/SEO/screen3.jpg",
-      "type": "image/jpg",
-      "sizes": "720x1280",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/SEO/screen4.jpg",
-      "sizes": "540x720",
-      "type": "image/jpeg",
-      "form_factor": "narrow"
-    }
-  ]
+  "lang": "es"
 }

@@ -1,0 +1,36 @@
+---
+import type { GetStaticPaths, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/MainLayout.astro";
+import NoticiaCard from "../../../components/card/NoticiaCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+import SectionHeading from "../../../components/SectionHeading.astro";
+import { LOCALES, type Locale, useTranslations } from "../../../i18n/ui";
+
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+  const todas = await getCollection("blog");
+  return LOCALES.flatMap((lang) => {
+    const noticias = todas
+      .filter((n) => n.data.lang === lang)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    return paginate(noticias, { params: { lang }, pageSize: 9 });
+  });
+};
+
+const lang = Astro.params.lang as Locale;
+const { page } = Astro.props as { page: Page<CollectionEntry<"blog">> };
+const t = useTranslations(lang);
+---
+
+<Layout title={t("noticias.titulo")} description={t("candidatura.intro")}>
+  <section class="section">
+    <div class="container">
+      <SectionHeading as="h1" eyebrow={t("nav.noticias")} title={t("noticias.titulo")} highlight={t("noticias.titulo")} lead={t("candidatura.intro")} />
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12">
+        {page.data.map((noticia) => <NoticiaCard noticia={noticia} lang={lang} />)}
+      </div>
+      <Pagination page={page} />
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,127 @@
+---
+import { getCollection } from "astro:content";
+import Image from "astro/components/Image.astro";
+import { ChevronLeft, UserRound, ArrowRight } from "@lucide/astro";
+import Layout from "../../../layouts/MainLayout.astro";
+import AmbitoIcon from "../../../components/AmbitoIcon.astro";
+import PersonaCard from "../../../components/card/PersonaCard.astro";
+import { LOCALES, type Locale, path, useTranslations } from "../../../i18n/ui";
+
+export async function getStaticPaths() {
+  const personas = await getCollection("candidatura");
+  return LOCALES.flatMap((lang) =>
+    personas.map((persona) => ({ params: { lang, persona: persona.id }, props: { persona } })),
+  );
+}
+
+const lang = Astro.params.lang as Locale;
+const { persona } = Astro.props;
+const t = useTranslations(lang);
+const { nombre, cargo, bio, image } = persona.data;
+
+// El euskera cae al castellano mientras no llegue la traducción de las biografías.
+const parrafos = bio[lang]?.length ? bio[lang] : bio.es;
+const sinTraducir = lang !== "es" && !bio[lang]?.length;
+
+// Ámbitos en los que participa esta persona.
+const ambitos = (
+  await getCollection("ambitos", (e) => e.data.lang === lang && e.data.personas.includes(persona.id))
+).sort((a, b) => a.data.order - b.data.order);
+
+// Siguiente y anterior en el orden protocolario.
+const todas = (await getCollection("candidatura")).sort((a, b) => a.data.order - b.data.order);
+const idx = todas.findIndex((p) => p.id === persona.id);
+const otras = [todas[idx - 1], todas[idx + 1]].filter(Boolean);
+---
+
+<Layout title={nombre} description={`${cargo[lang]} · ${parrafos[0] ?? ""}`}>
+  <section class="section">
+    <div class="container max-w-6xl">
+      <a
+        href={path(lang, "candidatura")}
+        class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-900 mb-10"
+      >
+        <ChevronLeft size={18} />{t("cta.volver")}
+      </a>
+
+      <div class="grid grid-cols-1 md:grid-cols-[minmax(0,360px)_1fr] gap-10 lg:gap-16 items-start">
+        <div class="relative md:sticky md:top-28">
+          <div
+            aria-hidden="true"
+            class="absolute -inset-3 rounded-[2rem] bg-[linear-gradient(135deg,var(--color-brand-400),var(--color-brand-900))] rotate-[-2deg] opacity-90"
+          >
+          </div>
+          {
+            image ? (
+              <Image
+                src={image}
+                alt={nombre}
+                widths={[360, 720]}
+                sizes="(max-width: 768px) 100vw, 360px"
+                format="webp"
+                quality={78}
+                loading="eager"
+                fetchpriority="high"
+                class="relative w-full h-auto rounded-[1.5rem] object-cover shadow-brand-lg"
+              />
+            ) : (
+              <div
+                class="relative w-full aspect-[3/4] grid place-items-center bg-[linear-gradient(135deg,var(--color-brand-50),var(--color-brand-100))] text-brand-400 rounded-[1.5rem]"
+                role="img"
+                aria-label={nombre}
+              >
+                <UserRound size={96} aria-hidden="true" strokeWidth={1.25} />
+              </div>
+            )
+          }
+        </div>
+
+        <div>
+          <p class="eyebrow text-accent-green-dark">{cargo[lang]}</p>
+          <h1 class="mt-4 text-3xl sm:text-4xl lg:text-5xl">{nombre}</h1>
+          {sinTraducir && <p class="text-sm text-slate-500 italic">(Testua gaztelaniaz)</p>}
+          <div class="page mt-6 text-lg [&_p:first-child]:text-xl [&_p:first-child]:text-brand-900 [&_p:first-child]:font-medium">
+            {parrafos.map((p) => <p>{p}</p>)}
+          </div>
+
+          {
+            ambitos.length > 0 && (
+              <div class="mt-10 pt-8 border-t border-brand-100">
+                <h2 class="text-lg sm:text-xl mb-4">{t("candidatura.enEsteAmbito")}</h2>
+                <ul class="grid sm:grid-cols-2 gap-3 list-none pl-0">
+                  {ambitos.map((a) => (
+                    <li>
+                      <a
+                        href={path(lang, "ambitos", a.data.key)}
+                        class="group card-soft card-lift flex items-center gap-3 px-4 py-3"
+                      >
+                        <span class="grid place-items-center w-10 h-10 rounded-xl bg-brand-50 text-brand-500 shrink-0">
+                          <AmbitoIcon ambito={a.data.key} size={20} />
+                        </span>
+                        <span class="font-semibold text-brand-900 group-hover:text-brand-500 flex-1">{a.data.title}</span>
+                        <ArrowRight size={16} class="text-brand-300" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      {
+        otras.length > 0 && (
+          <div class="mt-20 pt-12 border-t border-brand-100">
+            <h2 class="text-2xl sm:text-3xl mb-6">{lang === "eu" ? "Hautagaitzako beste kide batzuk" : "Otras personas de la candidatura"}</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              {otras.map((p) => (
+                <PersonaCard persona={p} lang={lang} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Layout>

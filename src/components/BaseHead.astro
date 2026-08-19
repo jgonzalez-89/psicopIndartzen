@@ -1,28 +1,43 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/og_1200x630.jpg';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { Font } from 'astro:assets';
+// Se importa global.css aquí para que llegue a todas las páginas.
+import "../styles/global.css";
+import type { ImageMetadata } from "astro";
+import FallbackImage from "../assets/og_1200x630.jpg";
+import { SITE, SITE_NAME, COPB_URL, CONTACT } from "../consts";
+import { getLocaleFromUrl, LOCALES, switchLocalePath } from "../i18n/ui";
+import { Font } from "astro:assets";
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
+  title: string;
+  description: string;
+  image?: ImageMetadata;
 }
 
+const lang = getLocaleFromUrl(Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const {
-  title = SITE_TITLE,
-  description = SITE_DESCRIPTION,
+  title = SITE[lang].title,
+  description = SITE[lang].description,
   image = FallbackImage,
 } = Astro.props;
+
+const fullTitle = title === SITE_NAME ? `${SITE_NAME} · ${SITE[lang].tagline}` : `${title} · ${SITE_NAME}`;
+
+const jsonLd = {
+  "@context": "https://schema.org/",
+  "@type": "Organization",
+  name: SITE_NAME,
+  alternateName: "PsiCop Indartzen",
+  url: Astro.site?.href,
+  description: SITE[lang].description,
+  areaServed: "Bizkaia",
+  memberOf: { "@type": "Organization", name: "Colegio Oficial de Psicología de Bizkaia", url: COPB_URL },
+  ...(CONTACT.email ? { email: CONTACT.email } : {}),
+};
 ---
 
-<!-- Global Metadata -->
+<!-- Metadatos globales -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
@@ -31,70 +46,41 @@ const {
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_NAME}
+  href={new URL(`rss-${lang}.xml`, Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <Font cssVariable="--font-atkinson" preload />
 
-<!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{
+  LOCALES.map((loc) => (
+    <link rel="alternate" hreflang={loc} href={new URL(switchLocalePath(Astro.url, loc), Astro.site)} />
+  ))
+}
+<link rel="alternate" hreflang="x-default" href={new URL(switchLocalePath(Astro.url, "es"), Astro.site)} />
 
-<!-- Primary Meta Tags -->
-<title>{title}</title>
-<meta name="title" content={title} />
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
 <meta name="description" content={description} />
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph -->
 <meta property="og:type" content="website" />
+<meta property="og:locale" content={lang === "eu" ? "eu_ES" : "es_ES"} />
+<meta property="og:site_name" content={SITE_NAME} />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
+<meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
 
-<!-- JSON-LD Structured Data -->
-<script async type="application/ld+json">
-  {
-    "@context": "http://schema.org/",
-    "@type": "Organization",
-    "name": "HealNet",
-    "brand": "HealNet",
-    "alternateName": "HealNet",
-    "url": "#",
-    "logo": "/favicon/android-chrome-512x512.png",
-    "description": "Specialized, efficient, and thorough cleaning services",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "L.K. Road",
-      "addressLocality": "Vashi",
-      "addressRegion": "Maharashtra",
-      "postalCode": "410200",
-      "addressCountry": "IN"
-    },
-    "contactPoint": [
-      {
-        "@type": "ContactPoint",
-        "telephone": "+444572008200",
-        "email": "info@healnet.com",
-        "contactType": "customer support",
-        "areaServed": "EN",
-        "availableLanguage": ["Englishn"]
-      }
-    ],
-    "sameAs": [
-      "https://www.linkedin.com/company/healnet",
-      "https://x.com/healnet",
-      "https://facebook.com/healnet"
-    ]
-  }
-</script>
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

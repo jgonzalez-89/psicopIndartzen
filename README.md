@@ -1,103 +1,88 @@
-> ⭐️ Love this theme? Star it to support my work!
+# PsiCopIndartzen
 
-# HealNet: Cleaning services website landing page
+Web de la candidatura **PsiCopIndartzen** a la Junta de Gobierno del Colegio Oficial
+de Psicología de Bizkaia (COPB) en las elecciones de 2026.
 
-A modern, responsive landing page template for digital healthcare platforms. Built with Astro and Tailwind CSS, HealNet helps telemedicine providers, clinics, and healthcare startups showcase their services, doctors, patient testimonials, and online appointment booking with a fast, professional, and conversion-focused design.
+Construida con Astro 7, Tailwind CSS 4 y DaisyUI, sobre el template
+[HealNet](https://github.com/anastasiiaxfr/HealNet).
 
-> ⚡ Built with Astro 7, Tailwind CSS 4 & DaisyUI, and Markdown — optimized for performance, SEO, and simplicity.
+## Idiomas
 
-![Template Preview](https://github.com/anastasiiaxfr/HealNet/blob/main/public/SEO/og_1200x630.jpg)
+El sitio es bilingüe castellano/euskera mediante el enrutado i18n de Astro:
 
-## Demo
+- `/es/…` — castellano (idioma por defecto; `/` redirige aquí)
+- `/eu/…` — euskera
 
-- ✨ [Live Demo](https://heal-net-self.vercel.app/)
-- 💨 [PageSpeed Insights Report](https://pagespeed.web.dev/analysis/https-heal-net-self-vercel-app/mc2q4y4luz?form_factor=mobile)
-- [Sitemap.xml](https://heal-net-self.vercel.app/sitemap-index.xml)
-- [Robots.txt](https://heal-net-self.vercel.app/robots.txt)
-- [Schema.org validator](https://search.google.com/test/rich-results/result?id=yGkAk4Ei8qxi6qzOT8nTgA)
-- [RSS](https://heal-net-self.vercel.app/rss.xml)
+Las cadenas de interfaz están en `src/i18n/ui.ts`. El contenido largo vive en
+colecciones, con un archivo por idioma.
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 99+/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and meta tags, Open Graph data, JSON-LD schema and PWA
-- ✅ Sitemap, robots.txt support
-- ✅ Markdown & MDX support
-- ✅ Fully responsive and accessible
-- ✅ Easily deploy to Vercel, Netlify, or Cloudflare Pages
-
-Pages:
-
-- home
-- contacts
-- service
-- service detail
-- doctors
-- doctors detail
-- blog
-- blog detail
-- 404 / 500
-
-## PWA support
-
-![pwa](https://github.com/anastasiiaxfr/HealNet/blob/main/public/SEO/3.png)
-
-## Google pages speed
-
-![desktop](https://github.com/anastasiiaxfr/HealNet/blob/main/public/SEO/2.png)
-![mobile](https://github.com/anastasiiaxfr/HealNet/blob/main/public/SEO/1.png)
-
-## Open Graph Card
-
-![Facebook](https://github.com/anastasiiaxfr/HealNet/blob/main/public/SEO/5.png)
-![Telegram](https://github.com/anastasiiaxfr/HealNet/blob/main/public/SEO/4.png)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Estructura del contenido
 
 ```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+src/content/
+├── ambitos/{es,eu}/     Ámbitos de la Psicología (jurídica, clínica, educación, social)
+├── candidatura/         Una ficha por persona, con `cargo` y `bio` bilingües
+├── paginas/{es,eu}/     Textos largos (manifiesto)
+└── blog/{es,eu}/        Noticias de campaña
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Las biografías tienen `bio.es` y `bio.eu`. Mientras `bio.eu` esté vacío, la ficha
+en euskera muestra el texto en castellano con un aviso.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Rutas
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+| Ruta | Contenido |
+| :--- | :--- |
+| `/{lang}/` | Portada: manifiesto, ámbitos y Junta de Gobierno |
+| `/{lang}/candidatura/` | Listado completo del equipo |
+| `/{lang}/candidatura/{persona}/` | Ficha individual |
+| `/{lang}/ambitos/` | Los cuatro ámbitos |
+| `/{lang}/ambitos/{ambito}/` | Texto del ámbito y personas que lo avalan |
+| `/{lang}/noticias/` | Noticias paginadas |
+| `/{lang}/contacto/` | Formulario de contacto |
+| `/rss-{lang}.xml` | RSS por idioma |
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Identidad de marca
 
-## 🧞 Commands
+Los logotipos están en `src/assets/brand/`:
 
-All commands are run from the root of the project, from a terminal:
+| Archivo | Uso |
+| :--- | :--- |
+| `isotipo.svg` | Solo la Ψ. Origen de los favicons |
+| `logotipo.svg` | Isotipo + nombre. Cabecera y menú móvil |
+| `logotipo-claim.svg` | Añade el lema bilingüe. Pie de página e imagen Open Graph |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+`Logo.astro` los sirve mediante la prop `variant` (`"simple"` o `"claim"`).
 
-## 👀 Want to learn more?
+La paleta se define en `src/styles/global.css`, bajo `@theme`, tomada del propio
+logotipo:
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Token | Color | Papel |
+| :--- | :--- | :--- |
+| `brand-700` | `#073B6C` | Azul marino: texto, titulares, enlaces |
+| `brand-400` | `#0085C9` | Azul medio: degradados y botones |
+| `accent-green` | `#5A9C29` | Verde de «Indartzen»: cargos y acentos |
+| `accent-orange` | `#F79B1F` | Naranja de la flecha: llamada a la acción principal |
 
-## 🛠 Credits
+Los favicons y la imagen Open Graph se generan a partir del isotipo; si el
+logotipo cambia, hay que regenerarlos.
 
-Made with ❤️ by [anastasiiaxfr](https://github.com/anastasiiaxfr/HealNet)
+## Pendiente
 
-HealNet is inspired by the free [HealNet Theme](https://www.figma.com/community/file/1368740058751542843)
+Busca los comentarios `TODO:` en el código. En resumen:
+
+- Fotografías de retrato de 6 integrantes (y la de Ana Sanz llega a 212×320 px).
+- Cargo de Marije Goikoetxea Iturregui.
+- Traducción al euskera de las biografías y del manifiesto.
+- Datos de contacto y redes sociales (`CONTACT` en `src/consts.ts`).
+- Dominio definitivo (`site` en `astro.config.mjs`).
+- Backend del formulario de contacto y aviso de protección de datos.
+
+## Comandos
+
+| Comando | Acción |
+| :--- | :--- |
+| `npm install` | Instala las dependencias |
+| `npm run dev` | Servidor local en `localhost:4321` |
+| `npm run build` | Compila el sitio en `./dist/` |
+| `npm run preview` | Previsualiza la compilación |

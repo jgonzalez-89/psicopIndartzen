@@ -1,34 +1,22 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
-import Logo from "../components/Logo.astro";
+import { getLocaleFromUrl, path, useTranslations } from "../i18n/ui";
 
-interface Props {
-  error: unknown;
-}
-
-const { error } = Astro.props;
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<Layout title="500 Error">
-  <section class="section flex-1 flex flex-col justify-center items-center">
-    <div class="container text-center grid gap-4">
-      <div class="text-center mx-auto">
-        <Logo />
-      </div>
-      <h1 class="text-5xl lg:text-9xl font-bold">500</h1>
-      <p>
-        {error instanceof Error ? error.message : "Unknown error"}
-      </p>
-      <a href="/" class="btn bg-[linear-gradient(125deg,var(--color-main-100),var(--color-main-200))] text-white border-0 rounded-xl text-lg py-3 px-6 h-auto shadow-xl hover:shadow-2xl mx-auto"
-        >GO TO HOME</a
+<Layout title={t("500.titulo")} description={t("500.texto")}>
+  <section class="section">
+    <div class="container text-center py-20">
+      <p class="text-7xl font-bold text-brand-400">500</p>
+      <h1 class="mt-4">{t("500.titulo")}</h1>
+      <p class="lead">{t("500.texto")}</p>
+      <a
+        href={path(lang)}
+        class="btn-brand btn-lg mt-8"
+        >{t("nav.inicio")}</a
       >
     </div>
   </section>
-
-  <style>
-	h1 {
-		font-size: 10em;
-		line-height: 0.8;
-	}
-  </style>
 </Layout>

@@ -1,108 +1,127 @@
 ---
 import Image from "astro/components/Image.astro";
-import { ChevronRight } from "@lucide/astro";
+import { getCollection } from "astro:content";
+import { ChevronRight, Users, Layers, Vote } from "@lucide/astro";
+import grupo from "../../assets/equipo/grupo-horizontal.jpg";
+import { getLocaleFromUrl, path, useTranslations } from "../../i18n/ui";
+import { SITE, CLAIM, ELECTION_YEAR } from "../../consts";
+
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const nPersonas = (await getCollection("candidatura")).length;
+const nAmbitos = (await getCollection("ambitos", (e) => e.data.lang === lang)).length;
+
+const claim = {
+  es: {
+    eyebrow: `Elecciones a la Junta de Gobierno · COP Bizkaia ${ELECTION_YEAR}`,
+    h1a: "Un Colegio",
+    h1b: "participativo",
+    h1c: "de todos y para todos.",
+    lead: "Transparencia, profesionalidad, cercanía y atención continuada para las personas colegiadas, desde la diversidad de todos los ámbitos de la Psicología.",
+    personas: "personas en la candidatura",
+    ambitos: "ámbitos representados",
+    elecciones: `Elecciones ${ELECTION_YEAR}`,
+    eleccionesSub: "Junta de Gobierno del COP Bizkaia",
+  },
+  eu: {
+    eyebrow: `Gobernu Batzarrerako hauteskundeak · Bizkaiko PE ${ELECTION_YEAR}`,
+    h1a: "Elkargo",
+    h1b: "parte-hartzailea",
+    h1c: "guztiona eta guztiontzat.",
+    lead: "Gardentasuna, profesionaltasuna, hurbiltasuna eta elkargokideenganako etengabeko arreta, Psikologiaren arlo guztien aniztasunetik.",
+    personas: "pertsona hautagaitzan",
+    ambitos: "arlo ordezkatuta",
+    elecciones: `${ELECTION_YEAR}ko hauteskundeak`,
+    eleccionesSub: "Bizkaiko PEko Gobernu Batzarra",
+  },
+}[lang];
 ---
 
-<section class="section section-hero py-10 sm:py-20 my-0!">
+<section class="relative pt-10 pb-16 sm:pt-16 lg:pt-20 lg:pb-28" data-hero>
   <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-10">
-      <div class="text-center sm:text-left">
-        <h1>
-          Your <span
-            class="bg-linear-to-r from-[#0179B4] to-[#88D8FF] bg-clip-text text-transparent"
-            >trusted partner</span
-          > in digital healthcare.
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] items-center gap-12 lg:gap-10">
+      <!-- Texto -->
+      <div class="text-center lg:text-left">
+        <p class="eyebrow fade-up justify-center lg:justify-start">{claim.eyebrow}</p>
+        <h1 class="mt-5 fade-up fade-up-delay-1">
+          {claim.h1a}{" "}
+          <span class="text-gradient">{claim.h1b}</span>{" "}
+          {claim.h1c}
         </h1>
-        <p class="mt-8 mb-10">
-          <span class="text-main-200"
-            >Empowering Your Health at Every Step.</span
-          > Experience personalized medical care from the comfort of your home. Connect
-          with <span class="text-main-200">certified doctors</span>, or manage
-          prescriptions, and schedule appointments with ease. Ready to take
-          control of your health? <span class="text-main-200">Get Started</span> or
-          Book an Appointment today.
+        <p class="lead mt-6 max-w-xl mx-auto lg:mx-0 fade-up fade-up-delay-2">{claim.lead}</p>
+        <p class="mt-6 text-xl font-semibold text-accent-green-dark italic fade-up fade-up-delay-2">
+          «{CLAIM[lang]}»
         </p>
-        <a
-          href="#"
-          class="btn bg-[linear-gradient(125deg,var(--color-main-100),var(--color-main-200))] text-white border-0 rounded-xl text-lg py-3 px-6 h-auto shadow-xl hover:shadow-2xl"
-          >Book an appointment <ChevronRight /></a
-        >
-
-        <p class="text-sm text-gray-400 mt-10 mb-6">
-          Trusted by millions across the globe:
-        </p>
-        <Image
-          src="/img/brands.webp"
-          alt="Brands"
-          format="webp"
-          quality="low"
-          fetchpriority="high"
-          width={380}
-          height={43}
-          densities={[1.5, 2]}
-          loading="eager"
-          class="w-auto h-auto mx-auto sm:mx-0"
-        />
+        <div class="flex flex-wrap gap-4 mt-10 justify-center lg:justify-start fade-up fade-up-delay-3">
+          <a href={path(lang, "candidatura")} class="btn-accent btn-lg">
+            {t("cta.verCandidatura")} <ChevronRight size={20} />
+          </a>
+          <a href={path(lang, "ambitos")} class="btn-outline-brand btn-lg">{t("ambitos.titulo")}</a>
+        </div>
       </div>
-      <div>
-        <div class="grid">
+
+      <!-- Composición visual: escena 3D con parallax suave y tarjetas flotando. -->
+      <div class="hero-scene relative mx-auto w-full max-w-xl lg:max-w-none px-5 sm:px-8 lg:pl-10 lg:pr-6 pt-8 pb-10 fade-up fade-up-delay-2">
+        <div class="hero-tilt relative" data-tilt>
+          <!-- Marco de color detrás de la foto, girado ligeramente. -->
+          <div
+            aria-hidden="true"
+            class="hero-layer absolute -inset-3 sm:-inset-4 rounded-[2rem] bg-[linear-gradient(135deg,var(--color-brand-400),var(--color-brand-900))] rotate-[-3deg] opacity-90"
+            style="--depth: -40px"
+          >
+          </div>
+          <div aria-hidden="true" class="hero-layer absolute -top-12 -right-10 w-40 h-40 bg-dots rounded-full opacity-80" style="--depth: 10px"></div>
+          <div aria-hidden="true" class="hero-layer absolute -bottom-10 -left-12 w-32 h-32 rounded-full bg-accent-orange/25 blur-2xl" style="--depth: -20px"></div>
+
           <Image
-            src="/img/img1.webp"
-            alt="Hero Image"
+            src={grupo}
+            alt={SITE[lang].tagline}
+            widths={[600, 900, 1200]}
+            sizes="(max-width: 1024px) 100vw, 50vw"
             format="webp"
-            quality="45"
+            quality={75}
             fetchpriority="high"
             loading="eager"
-            width="380"
-            height="375"
-            class="w-auto h-auto mx-auto [grid-area:1/1/2/2]"
+            class="hero-layer relative w-full h-auto rounded-[1.75rem] shadow-brand-lg object-cover"
+            style="--depth: 0px"
           />
-          <div class="[grid-area:1/1/2/2] mt-auto">
-            <div
-              class="border-main-200 border-2 rounded-xl p-5 bg-[linear-gradient(-125deg,#E9F6FF_0%,#ffffff_100%)] hidden sm:block sm:max-w-[40%] ml-auto"
-            >
-              <div class="flex flex-wrap gap-3 items-center">
-                <Image
-                  src="/img/avatars.webp"
-                  alt="Doctor"
-                  format="webp"
-                  quality="low"
-                  fetchpriority="high"
-                  width="122"
-                  height="38"
-                  class="w-auto h-auto"
-                />
 
-                <p class="text-xl text-black">
-                  2400<span class="text-main-200">+</span>
-                </p>
-              </div>
-              <p class="text-main-200 my-2">Happy Customers</p>
+          <!-- Tarjetas flotantes: se apoyan en los bordes de la foto, no encima. -->
+          <div
+            class="hero-layer hero-float absolute -left-5 sm:-left-8 lg:-left-9 bottom-14 sm:bottom-20 card-soft px-4 py-3 sm:px-5 sm:py-4 flex items-center gap-3 bg-white/95 backdrop-blur"
+            style="--depth: 70px; --float-dur: 6s; --float-delay: 0s"
+          >
+            <span class="grid place-items-center w-11 h-11 rounded-2xl bg-brand-50 text-brand-500">
+              <Users size={22} />
+            </span>
+            <div>
+              <p class="text-2xl font-bold text-brand-900 leading-none">{nPersonas}</p>
+              <p class="text-xs text-slate-500 mt-1 whitespace-nowrap">{claim.personas}</p>
+            </div>
+          </div>
 
-              <div class="flex flex-wrap gap-3 items-center">
-                <Image
-                  src="/img/stars.svg"
-                  alt="Doctor"
-                  width="107"
-                  height="14"
-                  class="w-auto h-auto"
-                />
-                <span class="text-gray-400 text-sm">(4.7 Stars)</span>
-              </div>
+          <div
+            class="hero-layer hero-float absolute -right-5 sm:-right-8 lg:-right-6 -top-6 sm:-top-8 card-soft px-4 py-3 sm:px-5 sm:py-4 flex items-center gap-3 bg-white/95 backdrop-blur"
+            style="--depth: 90px; --float-dur: 7s; --float-delay: -2.5s"
+          >
+            <span class="grid place-items-center w-11 h-11 rounded-2xl bg-accent-green/10 text-accent-green-dark">
+              <Layers size={22} />
+            </span>
+            <div>
+              <p class="text-2xl font-bold text-brand-900 leading-none">{nAmbitos}</p>
+              <p class="text-xs text-slate-500 mt-1 whitespace-nowrap">{claim.ambitos}</p>
             </div>
-            <div
-              class="bg-white p-4 rounded-xl shadow hidden sm:flex sm:max-w-[50%] text-main-200 text-lg items-center gap-3"
-            >
-              <svg class="icon" width="30" height="30">
-                <use xlink:href="#star"></use>
-              </svg>
-              Easy Appointment Booking
-            </div>
-            <div
-              class="relative border-main-200 border-2 rounded-xl p-5 pt-8 bg-[linear-gradient(-125deg,#E9F6FF_0%,#ffffff_100%)] hidden sm:flex sm:max-w-[60%] ml-auto mt-10 -mb-10 before:content-[''] before:absolute before:w-16.25 before:h-16.25 before:bg-[url('/img/icons/quote.svg')] before:bg-contain before:bg-no-repeat before:-top-8 before:left-5 text-black"
-            >
-              Lorem ipsum dolor sit amet, ligula ego. consectetuer adipiscing
-              elit doloras.
+          </div>
+
+          <div
+            class="hero-layer hero-float hidden sm:flex absolute right-8 -bottom-9 card-soft px-5 py-3 items-center gap-3 bg-brand-900 border-brand-900 text-white"
+            style="--depth: 50px; --float-dur: 8s; --float-delay: -4s"
+          >
+            <Vote size={20} class="text-accent-orange" />
+            <div>
+              <p class="font-bold leading-none">{claim.elecciones}</p>
+              <p class="text-xs text-white/70 mt-1 whitespace-nowrap">{claim.eleccionesSub}</p>
             </div>
           </div>
         </div>
@@ -110,3 +129,77 @@ import { ChevronRight } from "@lucide/astro";
     </div>
   </div>
 </section>
+
+<style>
+  /* Escena 3D: la perspectiva vive en el contenedor y las capas se reparten en
+     profundidad con --depth. Sin ratón (táctil) o con reduced-motion, solo flotan. */
+  .hero-scene {
+    perspective: 1400px;
+  }
+  .hero-tilt {
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+  }
+  .hero-layer {
+    transform: translateZ(var(--depth, 0px));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-float {
+      animation: hero-float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite;
+    }
+    @keyframes hero-float {
+      0%,
+      100% {
+        translate: 0 0;
+        rotate: 0deg;
+      }
+      50% {
+        translate: 0 -10px;
+        rotate: -1deg;
+      }
+    }
+  }
+</style>
+
+<script>
+  // Parallax 3D suave siguiendo el ratón. Solo con puntero fino y sin reduced-motion.
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+  const tilt = hero?.querySelector<HTMLElement>("[data-tilt]");
+
+  if (fine && !reduce && hero && tilt) {
+    let raf = 0;
+    let rx = 0;
+    let ry = 0;
+    const MAX = 6; // grados
+
+    const apply = () => {
+      tilt.style.setProperty("--rx", `${rx.toFixed(2)}deg`);
+      tilt.style.setProperty("--ry", `${ry.toFixed(2)}deg`);
+      raf = 0;
+    };
+
+    hero.addEventListener("pointermove", (e) => {
+      const r = tilt.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      // -1..1 respecto al centro de la escena, limitado para movimientos lejanos.
+      const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / (r.width * 0.9)));
+      const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / (r.height * 0.9)));
+      ry = dx * MAX;
+      rx = -dy * MAX;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+
+    hero.addEventListener("pointerleave", () => {
+      rx = 0;
+      ry = 0;
+      tilt.style.transition = "transform 0.6s ease-out";
+      if (!raf) raf = requestAnimationFrame(apply);
+      setTimeout(() => (tilt.style.transition = ""), 600);
+    });
+  }
+</script>

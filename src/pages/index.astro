@@ -1,24 +1,21 @@
 ---
-import Layout from "../layouts/MainLayout.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+// Raíz del sitio: redirige al idioma por defecto (castellano).
+// Astro necesita este archivo para generar la redirección de `/` a `/es/`.
+import { DEFAULT_LOCALE } from "../consts";
 
-import Hero from "../components/homepage/Hero.astro";
-import CtaForm from "../components/homepage/CtaForm.astro";
-import Services from "../components/homepage/Services.astro";
-import Story from "../components/homepage/Story.astro";
-import HowWorks from "../components/homepage/HowWorks.astro";
-import Testimonials from "../components/homepage/Testimonials.astro";
-import Team from "../components/homepage/Team.astro";
-import Support from "../components/homepage/Support.astro";
+const target = `/${DEFAULT_LOCALE}/`;
 ---
 
-<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<Hero />
-	<CtaForm />
-	<Services />
-	<Story />	
-	<HowWorks />
-	<Testimonials />
-	<Team />
-	<Support />
-</Layout>
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    <title>PsiCopIndartzen</title>
+  </head>
+  <body>
+    <a href={target}>PsiCopIndartzen</a>
+  </body>
+</html>

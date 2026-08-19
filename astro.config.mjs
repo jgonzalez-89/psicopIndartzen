@@ -7,10 +7,21 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://heal-net-self.vercel.app/",
-  integrations: [mdx(), sitemap()],
+  site: "https://psicopindartzen.eus/",
+  integrations: [mdx(), sitemap({ i18n: { defaultLocale: "es", locales: { es: "es-ES", eu: "eu-ES" } } })],
+  i18n: {
+    locales: ["es", "eu"],
+    defaultLocale: "es",
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: true,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
+    // Permite exponer el servidor local por un túnel (cloudflared / ngrok) para revisiones.
+    server: { allowedHosts: [".trycloudflare.com", ".ngrok-free.app", ".ngrok.app", ".ngrok.io"] },
+    preview: { allowedHosts: [".trycloudflare.com", ".ngrok-free.app", ".ngrok.app", ".ngrok.io"] },
   },
   fonts: [
     {

@@ -1,27 +1,33 @@
 ---
+import { ChevronRight, ChevronLeft } from "@lucide/astro";
+import { getLocaleFromUrl } from "../i18n/ui";
+
 const { page } = Astro.props;
-import { ChevronRight, ChevronLeft } from  '@lucide/astro';
+const lang = getLocaleFromUrl(Astro.url);
+
+const label = {
+  es: { prev: "Anterior", next: "Siguiente", of: (c: number, l: number) => `Página ${c} de ${l}` },
+  eu: { prev: "Aurrekoa", next: "Hurrengoa", of: (c: number, l: number) => `${c}. orria / ${l}` },
+}[lang];
 ---
 
-<div class="mt-20 flex items-center gap-4">
-  {
-    page.url.prev && (
-      <a href={page.url.prev} class="btn btn-outline">
-        <ChevronLeft size={18} />
-        Previous
-      </a>
-    )
-  }
+{
+  page.lastPage > 1 && (
+    <nav class="mt-16 flex items-center justify-center gap-4" aria-label={label.of(page.currentPage, page.lastPage)}>
+      {page.url.prev && (
+        <a href={page.url.prev} class="btn-outline-brand" rel="prev">
+          <ChevronLeft size={18} />
+          {label.prev}
+        </a>
+      )}
 
-  <span>
-    Page {page.currentPage} of {page.lastPage}
-  </span>
+      <span class="text-sm text-slate-500">{label.of(page.currentPage, page.lastPage)}</span>
 
-  {
-    page.url.next && (
-      <a href={page.url.next} class="btn btn-outline">
-        Next <ChevronRight size={18} />
-      </a>
-    )
-  }
-</div>
+      {page.url.next && (
+        <a href={page.url.next} class="btn-outline-brand" rel="next">
+          {label.next} <ChevronRight size={18} />
+        </a>
+      )}
+    </nav>
+  )
+}

@@ -1,9 +1,49 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* Paleta de marca PsiCopIndartzen, tomada del logotipo.
+   El isotipo combina cuatro familias: azul marino (la Ψ), azul medio y verde
+   (sus brazos) y naranja (la flecha ascendente). */
 @theme {
-  --color-main-100: #a7e2ff;
-  --color-main-200: #0277c2;
+  /* Tipografía: Atkinson Hyperlegible (cargada en BaseHead vía astro:assets). */
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+
+  /* Azul marino: color principal de texto, titulares y enlaces. */
+  --color-brand-900: #093671;
+  --color-brand-800: #05487D;
+  --color-brand-700: #073B6C;
+
+  /* Azul medio: degradados, botones y acentos fríos. */
+  --color-brand-500: #004C9A;
+  --color-brand-400: #0085C9;
+  --color-brand-300: #4FB3E6;
+
+  /* Fondos claros derivados del azul de marca. */
+  --color-brand-100: #D6E6F3;
+  --color-brand-50: #F1F7FC;
+
+  /* Verde: acentos de la palabra «Indartzen». */
+  --color-accent-green: #5A9C29;
+  --color-accent-green-light: #8BBC36;
+  --color-accent-green-dark: #208C40;
+
+  /* Naranja: la flecha del isotipo. Reservado para el foco de la página. */
+  --color-accent-orange: #F79B1F;
+  --color-accent-orange-dark: #E46122;
+
+  /* Gris del filete que separa el claim en el logotipo. */
+  --color-brand-gray: #B0B9C0;
+
+  /* Alias de retrocompatibilidad con el template original. */
+  --color-main-100: var(--color-brand-400);
+  --color-main-200: var(--color-brand-700);
+
+  --shadow-brand: 0 20px 50px -20px rgb(9 54 113 / 0.35);
+  --shadow-brand-lg: 0 30px 70px -25px rgb(9 54 113 / 0.45);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -12,64 +52,153 @@ body,
   @apply h-full;
 }
 
+body {
+  @apply font-sans text-slate-700 antialiased;
+}
+
+::selection {
+  background: var(--color-brand-400);
+  color: #fff;
+}
+
 .container {
-  @apply max-w-7xl! mx-auto px-4;
+  @apply max-w-7xl! mx-auto px-4 sm:px-6;
 }
 
 .section {
-  @apply my-10 lg:my-20;
+  @apply py-14 lg:py-24;
 }
 
 @layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-brand-900 font-bold leading-tight tracking-tight;
+  }
+
   h1 {
-    @apply text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 leading-tight;
+    @apply text-4xl sm:text-5xl lg:text-6xl mb-4;
   }
 
   h2 {
-    @apply text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 leading-tight;
+    @apply text-3xl sm:text-4xl lg:text-5xl mb-4;
   }
 
   h3 {
-    @apply text-xl sm:text-xl md:text-2xl lg:text-2xl font-semibold mb-4 leading-tight;
+    @apply text-xl sm:text-2xl mb-3;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-400 rounded;
   }
 }
 
+@layer components {
+  /* ---- Botones ---- */
+  .btn-brand,
+  .btn-accent,
+  .btn-outline-brand {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold text-base px-6 py-3 transition-all duration-200 no-underline;
+  }
+
+  .btn-brand {
+    @apply text-white bg-[linear-gradient(125deg,var(--color-brand-400),var(--color-brand-700))] shadow-brand hover:shadow-brand-lg hover:-translate-y-0.5;
+  }
+
+  .btn-accent {
+    @apply text-white bg-[linear-gradient(125deg,var(--color-accent-orange),var(--color-accent-orange-dark))] shadow-[0_20px_50px_-20px_rgb(228_97_34/0.55)] hover:shadow-[0_30px_70px_-25px_rgb(228_97_34/0.65)] hover:-translate-y-0.5;
+  }
+
+  .btn-outline-brand {
+    @apply text-brand-700 border-2 border-brand-700/30 bg-white/60 backdrop-blur hover:border-brand-700 hover:bg-brand-700 hover:text-white;
+  }
+
+  .btn-lg {
+    @apply text-lg px-8 py-4;
+  }
+
+  /* ---- Texto ---- */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs sm:text-sm uppercase tracking-[0.18em] font-bold text-brand-500;
+  }
+
+  .eyebrow::before {
+    content: "";
+    @apply inline-block w-8 h-0.5 rounded bg-accent-orange;
+  }
+
+  .text-gradient {
+    @apply bg-linear-to-r from-brand-900 via-brand-500 to-brand-400 bg-clip-text text-transparent;
+  }
+
+  .lead {
+    @apply text-lg sm:text-xl text-slate-600 leading-relaxed;
+  }
+
+  /* ---- Tarjetas ---- */
+  .card-soft {
+    @apply rounded-3xl bg-white border border-brand-100 shadow-[0_10px_40px_-20px_rgb(9_54_113/0.25)] transition-all duration-300;
+  }
+
+  .card-lift {
+    @apply hover:-translate-y-1 hover:shadow-brand-lg hover:border-brand-400/40;
+  }
+
+  /* ---- Fondos decorativos ---- */
+  .bg-dots {
+    background-image: radial-gradient(var(--color-brand-100) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+  }
+
+  .blob {
+    @apply absolute rounded-full blur-3xl pointer-events-none -z-10;
+  }
+}
+
+/* Prosa de páginas largas (manifiesto, ámbitos, biografías). */
 .page {
+  @apply text-slate-700;
+
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply mt-4 mb-3 font-bold;
+    @apply mt-8 mb-3 font-bold text-brand-900;
   }
 
   h2 {
-    @apply text-2xl sm:text-2xl md:text-3xl lg:text-4xl;
+    @apply text-2xl sm:text-3xl;
   }
 
   h3 {
-    @apply text-xl sm:text-xl md:text-2xl lg:text-3xl;
+    @apply text-xl sm:text-2xl;
   }
 
   h4 {
-    @apply text-lg sm:text-lg md:text-xl lg:text-2xl;
-  }
-
-  h5 {
-    @apply text-base sm:text-base md:text-lg lg:text-xl;
-  }
-
-  h6 {
-    @apply text-base sm:text-base md:text-base lg:text-lg;
+    @apply text-lg sm:text-xl;
   }
 
   p {
-    @apply my-3;
+    @apply my-4 leading-relaxed;
+  }
+
+  strong {
+    @apply text-brand-900;
+  }
+
+  a {
+    @apply text-brand-500 underline underline-offset-4 hover:text-brand-700;
   }
 
   ol,
   ul {
-    @apply pl-4 grid gap-3 my-3;
+    @apply pl-5 grid gap-2 my-4;
   }
 
   ol {
@@ -77,6 +206,72 @@ body,
   }
 
   ul {
-    @apply list-disc;
+    @apply list-disc marker:text-accent-orange;
+  }
+
+  blockquote {
+    @apply border-l-4 border-accent-orange pl-5 my-6 italic text-brand-900 text-lg;
+  }
+}
+
+/* Prosa sobre fondo oscuro (bloque del manifiesto en portada). */
+.prose-dark {
+  @apply text-white/85 text-base sm:text-lg leading-relaxed;
+
+  p {
+    @apply my-5;
+  }
+
+  p:first-child {
+    @apply text-xl sm:text-2xl font-semibold text-white leading-snug;
+  }
+
+  strong {
+    @apply text-white font-bold;
+  }
+
+  a {
+    @apply text-accent-orange underline underline-offset-4;
+  }
+}
+
+/* Animaciones de entrada suaves. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Deriva muy lenta de las manchas de color del fondo. */
+  .blob-drift {
+    animation: blob-drift 20s ease-in-out infinite alternate;
+  }
+  @keyframes blob-drift {
+    from {
+      translate: 0 0;
+      scale: 1;
+    }
+    to {
+      translate: 40px 30px;
+      scale: 1.12;
+    }
+  }
+
+  .fade-up {
+    animation: fade-up 0.7s ease-out both;
+  }
+  .fade-up-delay-1 {
+    animation-delay: 0.1s;
+  }
+  .fade-up-delay-2 {
+    animation-delay: 0.2s;
+  }
+  .fade-up-delay-3 {
+    animation-delay: 0.3s;
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 }

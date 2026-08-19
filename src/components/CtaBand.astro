@@ -1,0 +1,46 @@
+---
+import Image from "astro/components/Image.astro";
+import { ArrowRight } from "@lucide/astro";
+import isotipo from "../assets/brand/isotipo.svg";
+import { getLocaleFromUrl, path, useTranslations } from "../i18n/ui";
+import { CLAIM } from "../consts";
+
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const copy = {
+  es: {
+    title: "¿Quieres aportar tu voz?",
+    text: "Queremos un Colegio en el que todas las personas colegiadas participen. Cuéntanos tus ideas y propuestas.",
+  },
+  eu: {
+    title: "Zure ahotsa gehitu nahi duzu?",
+    text: "Elkargokide guztiek parte hartzen duten Elkargoa nahi dugu. Kontatu zure ideiak eta proposamenak.",
+  },
+}[lang];
+---
+
+<section class="container pb-16 lg:pb-24">
+  <div
+    class="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(125deg,var(--color-brand-400),var(--color-brand-900))] text-white px-8 py-12 sm:px-14 sm:py-16 shadow-brand-lg"
+  >
+    <div aria-hidden="true" class="absolute -right-10 -bottom-16 w-72 h-72 rounded-full bg-white/10 blur-2xl"></div>
+    <Image
+      src={isotipo}
+      alt=""
+      width={320}
+      aria-hidden="true"
+      class="absolute -right-8 -top-10 w-64 sm:w-80 h-auto opacity-[0.08] pointer-events-none select-none"
+    />
+    <div class="relative grid gap-8 lg:grid-cols-[1fr_auto] items-center">
+      <div>
+        <p class="text-sm uppercase tracking-[0.2em] font-bold text-accent-orange mb-3">{CLAIM[lang]}</p>
+        <h2 class="text-white mb-3">{copy.title}</h2>
+        <p class="text-white/85 text-lg max-w-2xl">{copy.text}</p>
+      </div>
+      <a href={path(lang, "contacto")} class="btn-accent btn-lg whitespace-nowrap">
+        {t("nav.contacto")} <ArrowRight size={20} />
+      </a>
+    </div>
+  </div>
+</section>

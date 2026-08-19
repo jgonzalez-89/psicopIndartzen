@@ -1,17 +1,15 @@
 ---
+import { getLocaleFromUrl } from "../i18n/ui";
+
 interface Props {
-	date: Date;
+  date: Date;
 }
 
 const { date } = Astro.props;
+const lang = getLocaleFromUrl(Astro.url);
+const bcp47 = lang === "eu" ? "eu-ES" : "es-ES";
 ---
 
 <time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
-	}
+  {date.toLocaleDateString(bcp47, { year: "numeric", month: "long", day: "numeric" })}
 </time>

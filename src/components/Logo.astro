@@ -1,15 +1,23 @@
 ---
-import Image from "astro/components/Image.astro"
+import { Image } from "astro:assets";
+import logotipo from "../assets/brand/logotipo.svg";
+import logotipoClaim from "../assets/brand/logotipo-claim.svg";
+import { getLocaleFromUrl, path } from "../i18n/ui";
+import { SITE_NAME, CLAIM } from "../consts";
+
+interface Props {
+  /** `claim` incluye el lema bilingüe bajo el nombre; se usa en el pie. */
+  variant?: "simple" | "claim";
+  class?: string;
+}
+
+const { variant = "simple", class: className } = Astro.props;
+const lang = getLocaleFromUrl(Astro.url);
+
+const src = variant === "claim" ? logotipoClaim : logotipo;
+const alt = variant === "claim" ? `${SITE_NAME}. ${CLAIM[lang]}` : SITE_NAME;
 ---
 
-<a href="/">
-<Image
-    src="/img/logo.svg"
-    alt="logo"
-    width="168"
-    height="48"
-    fetchpriority="high"
-    loading="eager"
-    class="w-auto h-auto"
-  />
+<a href={path(lang)} class:list={["inline-block", className]} aria-label={SITE_NAME}>
+  <Image src={src} alt={alt} width={variant === "claim" ? 260 : 200} densities={[1, 2]} loading="eager" class="w-auto h-auto" />
 </a>

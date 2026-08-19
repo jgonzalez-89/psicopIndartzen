@@ -1,23 +1,32 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { Menu } from '@lucide/astro';
-import Logo from './Logo.astro';
+import HeaderLink from "./HeaderLink.astro";
+import LocaleSwitcher from "./LocaleSwitcher.astro";
+import Logo from "./Logo.astro";
+import { Menu } from "@lucide/astro";
+import { getLocaleFromUrl, path, useTranslations } from "../i18n/ui";
+
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<header>
-	<nav class="container grid grid-cols-[168px_1fr_auto] py-4 items-center gap-2">
-		<Logo />
-		<div class="hidden lg:flex gap-10 items-center mx-auto">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/services">Services</HeaderLink>
-			<HeaderLink href="/doctors">Find Doctors</HeaderLink>
-			<HeaderLink href="#">About us</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="#">Contact us</HeaderLink>
-		</div>
-		<a href="#" class="btn ml-auto bg-[linear-gradient(125deg,var(--color-main-100),var(--color-main-200))] text-white border-0 rounded-xl text-lg py-3 px-6 h-auto shadow-xl hover:shadow-2xl">Join us</a>
-			<label for="my-drawer-2" aria-label="open sidebar" class="btn btn-square btn-ghost lg:hidden">
-         <Menu />
-        </label>
-	</nav>
+<header class="sticky top-0 z-40 border-b border-brand-100/60 bg-white/75 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
+  <nav class="container grid grid-cols-[auto_1fr_auto] py-3 items-center gap-2">
+    <Logo class="max-w-[160px] sm:max-w-[190px]" />
+    <div class="hidden lg:flex gap-1 items-center mx-auto">
+      <HeaderLink href={path(lang)}>{t("nav.inicio")}</HeaderLink>
+      <HeaderLink href={path(lang, "candidatura")}>{t("nav.candidatura")}</HeaderLink>
+      <HeaderLink href={path(lang, "ambitos")}>{t("nav.ambitos")}</HeaderLink>
+      <HeaderLink href={path(lang, "noticias")}>{t("nav.noticias")}</HeaderLink>
+      <HeaderLink href={path(lang, "contacto")}>{t("nav.contacto")}</HeaderLink>
+    </div>
+    <div class="flex items-center gap-3 ml-auto">
+      <LocaleSwitcher />
+      <a href={path(lang, "candidatura")} class="btn-brand hidden sm:inline-flex text-sm px-5 py-2.5">
+        {t("cta.verCandidatura")}
+      </a>
+      <label for="my-drawer-2" aria-label="Menu" class="btn btn-square btn-ghost lg:hidden text-brand-900">
+        <Menu />
+      </label>
+    </div>
+  </nav>
 </header>

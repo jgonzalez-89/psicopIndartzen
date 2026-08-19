@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { ArrowRight } from "@lucide/astro";
+import AmbitoIcon from "../AmbitoIcon.astro";
+import { type Locale, path } from "../../i18n/ui";
+
+interface Props {
+  ambito: CollectionEntry<"ambitos">;
+  lang: Locale;
+  as?: "h2" | "h3";
+}
+
+const { ambito, lang, as: Tag = "h3" } = Astro.props;
+const { key, title, description, personas } = ambito.data;
+---
+
+<a
+  href={path(lang, "ambitos", key)}
+  class="group card-soft card-lift relative flex flex-col p-7 sm:p-8 overflow-hidden"
+>
+  <div
+    aria-hidden="true"
+    class="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-brand-50 transition-transform duration-500 group-hover:scale-150"
+  >
+  </div>
+  <span class="relative grid place-items-center w-14 h-14 rounded-2xl bg-[linear-gradient(135deg,var(--color-brand-400),var(--color-brand-900))] text-white shadow-brand mb-5">
+    <AmbitoIcon ambito={key} size={26} />
+  </span>
+  <Tag class="relative text-xl sm:text-2xl mb-2 group-hover:text-brand-500 transition-colors">{title}</Tag>
+  <p class="relative text-slate-600 flex-1">{description}</p>
+  <span class="relative mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-500">
+    {personas.length > 0 && (
+      <span class="text-slate-400 font-normal">{personas.length} {lang === "eu" ? "pertsona" : "personas"} ·</span>
+    )}
+    <span class="inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+      {lang === "eu" ? "Ikusi arloa" : "Ver ámbito"} <ArrowRight size={16} />
+    </span>
+  </span>
+</a>

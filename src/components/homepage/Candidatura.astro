@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import { ChevronRight } from "@lucide/astro";
+import PersonaCard from "../card/PersonaCard.astro";
+import SectionHeading from "../SectionHeading.astro";
+import { getLocaleFromUrl, path, useTranslations } from "../../i18n/ui";
+
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const junta = (await getCollection("candidatura", (e) => e.data.featured)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const [primera, ...resto] = junta;
+const titulo = t("candidatura.titulo");
+---
+
+<section class="section">
+  <div class="container">
+    <SectionHeading eyebrow={t("candidatura.junta")} title={titulo} highlight={titulo.split(" ").slice(-1)[0]} lead={t("candidatura.intro")} />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12">
+      {primera && <PersonaCard persona={primera} lang={lang} destacada />}
+      {resto.map((persona) => <PersonaCard persona={persona} lang={lang} />)}
+    </div>
+
+    <div class="text-center mt-12">
+      <a href={path(lang, "candidatura")} class="btn-brand btn-lg">
+        {t("cta.verCandidatura")} <ChevronRight size={20} />
+      </a>
+    </div>
+  </div>
+</section>

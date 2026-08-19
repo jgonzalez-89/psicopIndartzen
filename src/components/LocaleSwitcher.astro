@@ -1,0 +1,29 @@
+---
+import { LOCALES, LOCALE_NAMES, LOCALE_SHORT, getLocaleFromUrl, switchLocalePath, useTranslations } from "../i18n/ui";
+
+const current = getLocaleFromUrl(Astro.url);
+const t = useTranslations(current);
+---
+
+<nav aria-label={t("idioma.cambiar")} class="flex items-center gap-1 text-sm">
+  {
+    LOCALES.map((loc, i) => (
+      <>
+        {i > 0 && <span aria-hidden="true" class="opacity-30">/</span>}
+        <a
+          href={switchLocalePath(Astro.url, loc)}
+          hreflang={loc}
+          lang={loc}
+          aria-current={loc === current ? "true" : undefined}
+          class:list={[
+            "px-1 rounded hover:text-brand-700",
+            loc === current ? "font-bold text-brand-700 underline" : "opacity-70",
+          ]}
+        >
+          <span aria-hidden="true">{LOCALE_SHORT[loc]}</span>
+          <span class="sr-only">{LOCALE_NAMES[loc]}</span>
+        </a>
+      </>
+    ))
+  }
+</nav>

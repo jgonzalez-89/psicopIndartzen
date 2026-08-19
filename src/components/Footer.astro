@@ -1,122 +1,86 @@
 ---
-const today = new Date();
-import Image from "astro/components/Image.astro";
+import Logo from "./Logo.astro";
+import LocaleSwitcher from "./LocaleSwitcher.astro";
+import { getCollection } from "astro:content";
+import { Mail, Phone, ExternalLink } from "@lucide/astro";
+import { getLocaleFromUrl, path, useTranslations } from "../i18n/ui";
+import { SITE, SITE_NAME, COPB_URL, CONTACT, ELECTION_YEAR } from "../consts";
+
+const lang = getLocaleFromUrl(Astro.url);
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+
+const ambitos = (await getCollection("ambitos", (e) => e.data.lang === lang)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const linkClass = "text-slate-600 hover:text-brand-700 hover:translate-x-0.5 inline-flex items-center gap-1.5 transition-all";
 ---
 
-<footer class="footer w-full bg-[#F2FAFF] gap-0 dark:bg-black">
-  <div class="footer-top w-full py-15">
+<footer class="relative w-full bg-brand-50 border-t border-brand-100 overflow-hidden">
+  <div aria-hidden="true" class="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--color-brand-900),var(--color-brand-400),var(--color-accent-green),var(--color-accent-orange))]"></div>
+  <div class="w-full pt-16 pb-12">
     <div class="container">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_2fr] gap-12">
         <div>
-          <a href="/">
-            <Image
-              src="/img/logo2.svg"
-              alt="HealNet Logo"
-              width="168"
-              height="144"
-            />
-          </a>
-          <p class="mt-4">
-            Experience personalized medical care from the comfort of your home.
-          </p>
-
+          <Logo variant="claim" />
+          <p class="mt-5 max-w-sm text-slate-600">{SITE[lang].tagline}</p>
+          <div class="mt-6"><LocaleSwitcher /></div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-10">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-10">
           <div>
-            <h3 class="text-main-200">Support</h3>
-
+            <h3 class="text-base uppercase tracking-widest text-brand-900 mb-4">{t("nav.ambitos")}</h3>
             <nav class="grid gap-3">
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Getting Started</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline">FAQS</a>
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Help Articles</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Report an issue</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Contact Help Desk</a
-              >
+              {
+                ambitos.map((a) => (
+                  <a href={path(lang, "ambitos", a.data.key)} class={linkClass}>
+                    {a.data.title}
+                  </a>
+                ))
+              }
             </nav>
           </div>
           <div>
-            <h3 class="text-main-200">Services</h3>
-
+            <h3 class="text-base uppercase tracking-widest text-brand-900 mb-4">{SITE_NAME}</h3>
             <nav class="grid gap-3">
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Booking appointments</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Online consultations</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Prescriptions</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Medicine Refills</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Medical Notes</a
-              >
+              <a href={path(lang, "candidatura")} class={linkClass}>{t("nav.candidatura")}</a>
+              <a href={path(lang, "noticias")} class={linkClass}>{t("nav.noticias")}</a>
+              <a href={path(lang, "contacto")} class={linkClass}>{t("nav.contacto")}</a>
+              <a href={COPB_URL} rel="noopener noreferrer" target="_blank" class={linkClass}>
+                COP Bizkaia <ExternalLink size={14} />
+              </a>
             </nav>
           </div>
           <div>
-            <h3 class="text-main-200">Legal</h3>
-
+            <h3 class="text-base uppercase tracking-widest text-brand-900 mb-4">{t("nav.contacto")}</h3>
             <nav class="grid gap-3">
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Terms & Conditions</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Privacy Policy</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Cookie Notice</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Cookie Preferences</a
-              >
-              <a href="#" class="hover:text-main-200 hover:underline"
-                >Trust Center</a
-              >
+              {
+                CONTACT.email ? (
+                  <a href={`mailto:${CONTACT.email}`} class={linkClass}>
+                    <Mail size={16} /> {CONTACT.email}
+                  </a>
+                ) : null
+              }
+              {
+                CONTACT.phone ? (
+                  <a href={`tel:${CONTACT.phone.replace(/\s+/g, "")}`} class={linkClass}>
+                    <Phone size={16} /> {CONTACT.phone}
+                  </a>
+                ) : null
+              }
+              <a href={path(lang, "contacto")} class="btn-outline-brand text-sm px-4 py-2 w-fit mt-1">
+                {lang === "eu" ? "Idatzi iezaguzu" : "Escríbenos"}
+              </a>
+              <!-- TODO: añadir redes sociales en CONTACT (src/consts.ts) cuando las faciliten. -->
             </nav>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="footer-btm w-full">
-    <div class="container pb-5">
-      <hr class="border-t border-main-200 mb-5" />
-      <div class="flex flex-wrap gap-4 items-center justify-between">
-          <div class="flex flex-wrap gap-3 items-center">
-            <a href="#" class="transition hover:-rotate-6" title="Facebook">
-              <svg class="icon" width="32" height="32">
-                <use xlink:href="#soc1"></use>
-              </svg>
-            </a>
-            <a href="#" class="transition hover:-rotate-6" title="Instagram">
-              <svg class="icon" width="32" height="32">
-                <use xlink:href="#soc2"></use>
-              </svg>
-            </a>
-            <a href="#" class="transition hover:-rotate-6" title="Linkedin">
-              <svg class="icon" width="32" height="32">
-                <use xlink:href="#soc3"></use>
-              </svg>
-            </a>
-            <a href="#" class="transition hover:-rotate-6" title="Youtube">
-              <svg class="icon" width="32" height="32">
-                <use xlink:href="#soc4"></use>
-              </svg>
-            </a>
-          </div>
-        <p>
-          HealNet &copy; {today.getFullYear()}. All Rights Reserved
-        </p>
-      </div>
+  <div class="w-full border-t border-brand-100 py-6">
+    <div class="container flex flex-col sm:flex-row gap-2 justify-between text-sm text-slate-500">
+      <p>© {year} {SITE_NAME}. {t("footer.derechos")}</p>
+      <p>{lang === "eu" ? `${ELECTION_YEAR}ko hauteskundeak` : `Elecciones ${ELECTION_YEAR}`}</p>
     </div>
   </div>
 </footer>

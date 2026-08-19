@@ -1,0 +1,108 @@
+---
+import { Mail, UserRound, Send, Building2, ExternalLink } from "@lucide/astro";
+import Layout from "../../layouts/MainLayout.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import { LOCALES, type Locale, useTranslations } from "../../i18n/ui";
+import { CONTACT, COPB_URL, CLAIM } from "../../consts";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+const t = useTranslations(lang);
+
+const copy = {
+  es: {
+    intro: "¿Tienes una idea, una propuesta o una duda? Escríbenos: queremos un Colegio que escuche.",
+    nombre: "Tu nombre",
+    email: "Tu correo electrónico",
+    mensaje: "Tu mensaje",
+    enviar: "Enviar mensaje",
+    colegio: "Colegio Oficial de Psicología de Bizkaia",
+    colegioSub: "Toda la información oficial sobre el proceso electoral.",
+    escribenos: "Correo electrónico",
+  },
+  eu: {
+    intro: "Ideiaren bat, proposamenen bat edo zalantzaren bat duzu? Idatzi iezaguzu: entzuten duen Elkargoa nahi dugu.",
+    nombre: "Zure izena",
+    email: "Zure helbide elektronikoa",
+    mensaje: "Zure mezua",
+    enviar: "Bidali mezua",
+    colegio: "Bizkaiko Psikologiaren Elkargo Ofiziala",
+    colegioSub: "Hauteskunde-prozesuari buruzko informazio ofizial guztia.",
+    escribenos: "Helbide elektronikoa",
+  },
+}[lang];
+
+const inputClass =
+  "w-full rounded-2xl border-2 border-brand-100 bg-white px-4 py-3.5 text-base text-slate-800 placeholder:text-slate-400 focus:border-brand-400 focus:outline-none transition-colors";
+---
+
+<Layout title={t("nav.contacto")} description={copy.intro}>
+  <section class="section">
+    <div class="container">
+      <SectionHeading as="h1" eyebrow={CLAIM[lang]} title={t("nav.contacto")} lead={copy.intro} />
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-8 lg:gap-12 mt-12 max-w-5xl mx-auto items-start">
+        <!-- TODO: el formulario no tiene backend. Definir destino (Formspree, Netlify Forms,
+             un endpoint propio...) y añadir el aviso de protección de datos antes de publicar. -->
+        <form method="POST" class="card-soft p-6 sm:p-10 grid gap-5">
+          <div class="grid sm:grid-cols-2 gap-5">
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold text-brand-900 inline-flex items-center gap-2"><UserRound size={16} />{copy.nombre}</span>
+              <input class={inputClass} type="text" name="nombre" required autocomplete="name" />
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold text-brand-900 inline-flex items-center gap-2"><Mail size={16} />{copy.email}</span>
+              <input class={inputClass} type="email" name="email" required autocomplete="email" />
+            </label>
+          </div>
+          <label class="grid gap-2">
+            <span class="text-sm font-semibold text-brand-900">{copy.mensaje}</span>
+            <textarea class={inputClass} name="mensaje" rows="6" required></textarea>
+          </label>
+          <button type="submit" class="btn-brand btn-lg w-full sm:w-auto sm:justify-self-start mt-2">
+            {copy.enviar} <Send size={18} />
+          </button>
+        </form>
+
+        <aside class="grid gap-5">
+          <a
+            href={COPB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group card-soft card-lift p-6 flex gap-4 items-start"
+          >
+            <span class="grid place-items-center w-12 h-12 rounded-2xl bg-brand-50 text-brand-500 shrink-0">
+              <Building2 size={24} />
+            </span>
+            <div class="flex-1">
+              <p class="font-bold text-brand-900 group-hover:text-brand-500 inline-flex items-center gap-1.5">
+                {copy.colegio} <ExternalLink size={14} />
+              </p>
+              <p class="text-sm text-slate-600 mt-1">{copy.colegioSub}</p>
+            </div>
+          </a>
+          {
+            CONTACT.email && (
+              <a href={`mailto:${CONTACT.email}`} class="group card-soft card-lift p-6 flex gap-4 items-start">
+                <span class="grid place-items-center w-12 h-12 rounded-2xl bg-accent-green/10 text-accent-green-dark shrink-0">
+                  <Mail size={24} />
+                </span>
+                <div>
+                  <p class="text-sm text-slate-500">{copy.escribenos}</p>
+                  <p class="font-bold text-brand-900 group-hover:text-brand-500">{CONTACT.email}</p>
+                </div>
+              </a>
+            )
+          }
+          <div class="rounded-3xl bg-[linear-gradient(135deg,var(--color-brand-400),var(--color-brand-900))] text-white p-6">
+            <p class="text-sm uppercase tracking-widest text-accent-orange font-bold">PsiCopIndartzen</p>
+            <p class="mt-2 text-xl font-semibold leading-snug">«{CLAIM[lang]}»</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Layout>

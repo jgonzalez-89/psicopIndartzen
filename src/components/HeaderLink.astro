@@ -1,21 +1,28 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-type Props = HTMLAttributes<'a'>;
+type Props = HTMLAttributes<"a">;
 
 const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+const target = String(href).replace(/\/$/, "");
+// La portada de cada idioma ("/es") solo se marca en coincidencia exacta; el
+// resto de secciones también en sus subrutas (p. ej. /es/candidatura/elena...).
+const esPortada = /^\/[a-z]{2}$/.test(target);
+const isActive =
+  target !== "" && (pathname === target || (!esPortada && pathname.startsWith(target + "/")));
 ---
 
-<a href={href} class:list={[className, { active: isActive }, 'hover:text-main-200']} {...props}>
-	<slot />
+<a
+  href={href}
+  aria-current={isActive ? "page" : undefined}
+  class:list={[
+    className,
+    "relative px-3 py-2 rounded-full font-medium text-slate-600 hover:text-brand-900 hover:bg-brand-50",
+    "after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-accent-orange after:scale-x-0 after:origin-left after:transition-transform",
+    { "text-brand-900 after:scale-x-100": isActive },
+  ]}
+  {...props}
+>
+  <slot />
 </a>
-<style>
-	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
-		color: var(--color-main-200);
-	}
-</style>

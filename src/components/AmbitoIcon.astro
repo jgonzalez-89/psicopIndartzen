@@ -1,0 +1,21 @@
+---
+import { Scale, HeartPulse, GraduationCap, Users, Brain } from "@lucide/astro";
+
+interface Props {
+  ambito: string;
+  size?: number;
+  class?: string;
+}
+
+const { ambito, size = 24, class: className } = Astro.props;
+
+const ICONS: Record<string, typeof Brain> = {
+  juridica: Scale,
+  clinica: HeartPulse,
+  educacion: GraduationCap,
+  social: Users,
+};
+const Icon = ICONS[ambito] ?? Brain;
+---
+
+<Icon size={size} class={className} aria-hidden="true" />
