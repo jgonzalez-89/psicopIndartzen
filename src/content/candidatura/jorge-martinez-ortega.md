@@ -11,7 +11,7 @@ bio:
     - "Formador de la Fundación Pilares para la implantación del modelo AICP desde la mirada que ofrece la ética."
   # TODO: traducción al euskera pendiente de recibir.
   eu: []
-# TODO: falta la fotografía de retrato.
+image: ../../assets/candidatura/jorge-martínez-ortega.png
 order: 5
 featured: true
 ---

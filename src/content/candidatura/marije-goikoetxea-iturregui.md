@@ -11,7 +11,7 @@ bio:
     - "Responsable de Coordinación Técnica en la Estrategia Vasca de prevención y detección de malos tratos a personas mayores."
   # TODO: traducción al euskera pendiente de recibir.
   eu: []
-# TODO: falta la fotografía de retrato.
+image: ../../assets/candidatura/marije-goikoetxea.png
 order: 10
 featured: false
 ---
