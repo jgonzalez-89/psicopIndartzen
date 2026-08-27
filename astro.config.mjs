@@ -8,7 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://psicopindartzen.eus/",
+  site: "https://www.psicopindartzen.es/",
   // El sitio sigue siendo estático; el adapter solo traduce las redirecciones
   // (p. ej. / → /es/ del i18n) a configuración nativa de Vercel en el build.
   adapter: vercel(),

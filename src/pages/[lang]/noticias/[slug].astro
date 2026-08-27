@@ -21,7 +21,15 @@ const t = useTranslations(lang);
 const { title, description, pubDate, updatedDate, heroImage } = noticia.data;
 ---
 
-<Layout title={title} description={description} image={heroImage}>
+<Layout
+  title={title}
+  description={description}
+  image={heroImage}
+  imageAlt={title}
+  ogType="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+>
   <div class="container py-10 lg:py-16 max-w-4xl">
     <a href={path(lang, "noticias")} class="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 hover:text-brand-900 mb-10">
       <ChevronLeft size={18} />{t("cta.volver")}

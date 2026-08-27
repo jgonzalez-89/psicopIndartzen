@@ -6,6 +6,7 @@ import Layout from "../../../layouts/MainLayout.astro";
 import AmbitoIcon from "../../../components/AmbitoIcon.astro";
 import PersonaCard from "../../../components/card/PersonaCard.astro";
 import { LOCALES, type Locale, path, useTranslations } from "../../../i18n/ui";
+import { SITE_NAME } from "../../../consts";
 
 export async function getStaticPaths() {
   const personas = await getCollection("candidatura");
@@ -32,9 +33,18 @@ const ambitos = (
 const todas = (await getCollection("candidatura")).sort((a, b) => a.data.order - b.data.order);
 const idx = todas.findIndex((p) => p.id === persona.id);
 const otras = [todas[idx - 1], todas[idx + 1]].filter(Boolean);
+
+// Tarjeta de compartición con su retrato (ver src/pages/og/).
+const ogImage = `/og/${lang}/candidatura/${persona.id}.jpg`;
 ---
 
-<Layout title={nombre} description={`${cargo[lang]} · ${parrafos[0] ?? ""}`}>
+<Layout
+  title={nombre}
+  description={`${cargo[lang]} · ${parrafos[0] ?? ""}`}
+  image={ogImage}
+  imageAlt={`${nombre}, ${cargo[lang]} · ${SITE_NAME}`}
+  ogType="profile"
+>
   <section class="section">
     <div class="container max-w-6xl">
       <a

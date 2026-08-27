@@ -2,8 +2,8 @@
 
 export const SITE_NAME = "PsiCopIndartzen";
 
-// TODO: dominio pendiente de confirmar con la candidatura (ver astro.config.mjs).
-export const SITE_URL = "https://psicopindartzen.eus";
+// Dominio de producción (el vértice sin www redirige 308 a www en Vercel).
+export const SITE_URL = "https://www.psicopindartzen.es";
 
 // Candidatura a la Junta de Gobierno del Colegio Oficial de Psicología de Bizkaia (COPB).
 export const ELECTION_YEAR = 2026;

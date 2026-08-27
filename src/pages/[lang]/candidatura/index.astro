@@ -5,6 +5,7 @@ import PersonaCard from "../../../components/card/PersonaCard.astro";
 import SectionHeading from "../../../components/SectionHeading.astro";
 import CtaBand from "../../../components/CtaBand.astro";
 import { LOCALES, type Locale, useTranslations } from "../../../i18n/ui";
+import grupoImage from "../../../assets/equipo/grupo-horizontal.jpg";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -19,7 +20,7 @@ const resto = todas.filter((p) => !p.data.featured);
 const titulo = t("candidatura.titulo");
 ---
 
-<Layout title={titulo} description={t("candidatura.intro")}>
+<Layout title={titulo} description={t("candidatura.intro")} image={grupoImage} imageAlt={titulo}>
   <section class="section pb-10">
     <div class="container">
       <SectionHeading
