@@ -9,7 +9,7 @@ personas:
   - "inaki-garcia-maza"
   - "aritz-uzelay-aristi"
   - "olaia-martin-azkorra"
-  - "haidee-fernandez"
+  - "haidee-fernandez-pastor"
   - "teresa-casanovas-llorens"
 ---
 

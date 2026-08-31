@@ -4,6 +4,7 @@ key: presentacion-candidatura
 title: PsiCopIndartzenek bere hautagaitza aurkeztu du
 description: Psikologiaren arlo guztiak ordezkatzen dituen taldea Bizkaiko PEko Gobernu Batzarrerako hauteskundeetara aurkezten da, 2026an.
 pubDate: 2026-06-22
+heroImage: ../../../assets/equipo/grupo-horizontal.jpg
 ---
 
 <!-- TODO: traducción pendiente de revisión. -->
