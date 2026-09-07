@@ -1,5 +1,5 @@
 ---
-import { Scale, HeartPulse, GraduationCap, Users, Brain } from "@lucide/astro";
+import { Scale, HeartPulse, GraduationCap, Users, Building2, Medal, Brain } from "@lucide/astro";
 
 interface Props {
   ambito: string;
@@ -14,6 +14,8 @@ const ICONS: Record<string, typeof Brain> = {
   clinica: HeartPulse,
   educacion: GraduationCap,
   social: Users,
+  organizaciones: Building2,
+  deporte: Medal,
 };
 const Icon = ICONS[ambito] ?? Brain;
 ---

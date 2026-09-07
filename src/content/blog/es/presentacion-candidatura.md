@@ -9,4 +9,4 @@ heroImage: ../../../assets/equipo/grupo-horizontal.jpg
 
 PsiCopIndartzen se presenta a las elecciones a la Junta de Gobierno del Colegio Oficial de Psicología de Bizkaia con un equipo que reúne experiencia y conocimiento teórico-práctico de todas las especialidades.
 
-A lo largo de las próximas semanas iremos presentando cada uno de los ámbitos de la Psicología que representamos —jurídica, clínica y sanitaria, educativa y de intervención social— junto a las personas que los avalan.
+A lo largo de las próximas semanas iremos presentando cada uno de los ámbitos de la Psicología que representamos —jurídica, clínica y sanitaria, educativa, de intervención social, de las organizaciones y del deporte— junto a las personas que los avalan.

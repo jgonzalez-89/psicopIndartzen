@@ -14,7 +14,7 @@ bio:
     - "Osasun psikologo gaitua eta Psikoterapeuta (International Integrative Psychotherapy Association)."
     - "Psikologo Klinikoa 2009. urtetik, etengabeko prestakuntzan."
     - "Aukebi Zentro Psikologikoaren sortzailea; bertan psikologo kliniko gisa aritzen da. Gizarte-bazterketan dauden emakume gazteentzako egoitza-zentro batean egiten du lan."
-image: ../../assets/candidatura/haidee-fernandez-pastor.jpg
+image: ../../assets/candidatura/haidee-fernandez-pastor.png
 order: 12
 featured: false
 ---

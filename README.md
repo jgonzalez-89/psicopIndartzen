@@ -71,12 +71,52 @@ logotipo cambia, hay que regenerarlos.
 
 Busca los comentarios `TODO:` en el código. En resumen:
 
-- Fotografías de retrato de 6 integrantes (y la de Ana Sanz llega a 212×320 px).
-- Cargo de Marije Goikoetxea Iturregui.
-- Traducción al euskera de las biografías y del manifiesto.
-- Datos de contacto y redes sociales (`CONTACT` en `src/consts.ts`).
-- Dominio definitivo (`site` en `astro.config.mjs`).
+Pendiente de la candidatura:
+
+- Cargo de Marije Goikoetxea Iturregui (el resto ya están confirmados).
+- Validación de los textos de los ámbitos de Organizaciones y Deporte, redactados
+  a partir de la reunión y marcados con `TODO` en `src/content/ambitos/`.
+- Datos de contacto y redes sociales (`CONTACT` en `src/consts.ts`): de momento
+  solo hay Instagram.
+- Revisión del euskera por una persona euskaldun: biografías, manifiesto, las
+  noticias y las cadenas de interfaz (`src/i18n/ui.ts`).
+- Responsable del tratamiento de datos, para el aviso legal y la política de
+  privacidad.
+
+Pendiente de desarrollo:
+
 - Backend del formulario de contacto y aviso de protección de datos.
+- Páginas de aviso legal y política de privacidad: las cadenas están en
+  `src/i18n/ui.ts` (`footer.aviso`, `footer.privacidad`) pero no hay página ni
+  enlace en el pie.
+
+## Materiales para Instagram
+
+`npm run instagram` compone, a partir del mismo contenido de `src/content/`, las
+publicaciones y las historias de la campaña en `./instagram/` (carpeta ignorada
+por git, se rehace en cada ejecución):
+
+| Carpeta | Formato | Contenido |
+| :--- | :--- | :--- |
+| `posts/candidatura/` | 1080×1350 | Una publicación por integrante |
+| `posts/ambitos/` | 1080×1350 | Un ámbito por publicación |
+| `posts/articulos/` | 1080×1350 | Las noticias del blog |
+| `stories/candidatura/` | 1080×1920 | Portada y trayectoria de cada integrante |
+| `stories/manifiesto/` | 1080×1920 | El manifiesto por entregas |
+| `destacados/` | 1080×1920 | Portadas de historias destacadas |
+| `pies.md` | — | El texto de cada publicación |
+| `movil/` | — | Un destacado por carpeta, listo para pasar al teléfono |
+
+Todo se genera en castellano y en euskera. La maquetación reutiliza el mismo
+motor que las imágenes Open Graph (`src/lib/og.ts`): satori más sharp, con las
+fuentes Atkinson y la paleta de marca.
+
+El feed se puede publicar desde instagram.com, eligiendo **Original** en el
+selector de recorte. Las historias no: Instagram web no permite subirlas y un
+destacado solo se monta con historias ya publicadas, así que esa parte va desde
+el móvil. Por eso `movil/` agrupa cada destacado en su carpeta, con los archivos
+numerados y con la fecha de captura reescrita de forma creciente, para que
+lleguen ordenados al carrete. `instagram/LEEME.md` detalla el procedimiento.
 
 ## Comandos
 
@@ -86,3 +126,4 @@ Busca los comentarios `TODO:` en el código. En resumen:
 | `npm run dev` | Servidor local en `localhost:4321` |
 | `npm run build` | Compila el sitio en `./dist/` |
 | `npm run preview` | Previsualiza la compilación |
+| `npm run instagram` | Genera en `./instagram/` los materiales para Instagram |

@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "instagram": "node scripts/instagram.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
-    "daisyui": "^5.5.23"
+    "daisyui": "^5.5.23",
+    "js-yaml": "^5.4.1"
   }
 }

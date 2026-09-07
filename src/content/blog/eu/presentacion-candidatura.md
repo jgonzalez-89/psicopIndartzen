@@ -11,4 +11,4 @@ heroImage: ../../../assets/equipo/grupo-horizontal.jpg
 
 PsiCopIndartzen Bizkaiko Psikologiaren Elkargo Ofizialeko Gobernu Batzarrerako hauteskundeetara aurkezten da, espezialitate guztietako esperientzia eta ezagutza teoriko-praktikoa biltzen dituen taldearekin.
 
-Datozen asteetan ordezkatzen ditugun Psikologiaren arlo bakoitza aurkeztuko dugu —juridikoa, klinikoa eta sanitarioa, hezkuntzakoa eta esku-hartze sozialekoa—, haiek babesten dituzten pertsonekin batera.
+Datozen asteetan ordezkatzen ditugun Psikologiaren arlo bakoitza aurkeztuko dugu —juridikoa, klinikoa eta sanitarioa, hezkuntzakoa, esku-hartze sozialekoa, erakundeetakoa eta kirolekoa—, haiek babesten dituzten pertsonekin batera.

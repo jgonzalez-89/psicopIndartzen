@@ -4,8 +4,6 @@ key: la-psicologia-que-somos
 title: La Psicología que somos, la Psicología que podemos ser
 description: César San Juan, catedrático de Psicología Criminal y Psicología Jurídica de la UPV/EHU, reivindica la pluralidad de nuestra disciplina y respalda la candidatura de Elena Fernández-Markaida.
 pubDate: 2026-08-31
-# TODO: retrato del autor pendiente de recibir. Al añadirlo en
-# src/assets/blog/, descomentar la línea siguiente.
 heroImage: ../../../assets/blog/cesar-san-juan.jpg
 ---
 

@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # salida local del adapter de Vercel
 .vercel/
+
+# materiales de Instagram generados por scripts/instagram.mjs
+instagram/

@@ -8,12 +8,13 @@ export const SITE_URL = "https://www.psicopindartzen.es";
 // Candidatura a la Junta de Gobierno del Colegio Oficial de Psicología de Bizkaia (COPB).
 export const ELECTION_YEAR = 2026;
 
-// TODO: datos de contacto pendientes de recibir.
+// TODO: teléfono y resto de redes pendientes de recibir.
+// El correo es la cuenta que gestiona la candidatura para la web.
 export const CONTACT = {
-  email: "",
+  email: "psicopindartzen.rs@gmail.com",
   phone: "",
   social: {
-    instagram: "",
+    instagram: "psicopindartzen",
     linkedin: "",
     twitter: "",
   },

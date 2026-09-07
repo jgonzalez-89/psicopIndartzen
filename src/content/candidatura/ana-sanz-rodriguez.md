@@ -12,7 +12,7 @@ bio:
     - "Psikologian lizentziaduna, psikologia klinikoan espezialista eta auzitegiko psikologoa Justizia Administrazioan."
     - "Ibilbide profesional sendoa, irizpidean, erantzukizunean eta zorroztasunean oinarritua, erabakiek pertsonen bizitzan zuzeneko eragina duten testuinguru konplexuetan."
     - "Hautagaitza honetara aurkezten naiz lanbidearen kohesioaren eta aitortzaren alde lan egiteko, Elkargoak kalitate, laguntza eta elkargokideen ondoan egoteko erreferente gisa eta erreferentzia profesionaleko gune gisa duen zeregina indartuz."
-image: ../../assets/candidatura/ana-sanz-rodriguez.jpg
+image: ../../assets/candidatura/ana-sanz-rodriguez.png
 order: 6
 featured: false
 ---

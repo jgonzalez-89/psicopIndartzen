@@ -4,9 +4,7 @@ key: la-psicologia-que-somos
 title: Garen Psikologia, izan gaitezkeen Psikologia
 description: César San Juanek, UPV/EHUko Psikologia Kriminaleko eta Psikologia Juridikoko katedradunak, gure diziplinaren aniztasuna aldarrikatzen du eta Elena Fernández-Markaidaren hautagaitza babesten.
 pubDate: 2026-08-31
-# TODO: retrato del autor pendiente de recibir. Al añadirlo en
-# src/assets/blog/, descomentar la línea siguiente.
-# heroImage: ../../../assets/blog/cesar-san-juan.jpg
+heroImage: ../../../assets/blog/cesar-san-juan.jpg
 ---
 
 <!-- TODO: traducción pendiente de revisión por una persona euskaldun. -->
