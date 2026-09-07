@@ -56,6 +56,7 @@ const T = {
     equipo: "CANDIDATURA",
     avalan: "Nos representan en este ámbito",
     continua: "sigue",
+    enlace: "Entra desde el enlace de nuestra bio, o copia esta dirección:",
   },
   eu: {
     eyebrow: `HAUTAGAITZA · COP BIZKAIA ${ELECTION_YEAR}`,
@@ -66,6 +67,7 @@ const T = {
     equipo: "HAUTAGAITZA",
     avalan: "Arlo honetan ordezkatzen gaituzte",
     continua: "jarraitzen du",
+    enlace: "Sartu gure bioko estekatik, edo kopiatu helbide hau:",
   },
 };
 
@@ -707,6 +709,14 @@ async function postArticulo({ titulo, descripcion, hero, lang }) {
 
 const HASHTAGS = "#PsiCopIndartzen #Psicologia #COPBizkaia #Bizkaia #Psikologia #Elecciones2026";
 
+// Instagram no convierte en enlace las URLs del pie de una publicación: ahí solo
+// son pinchables los hashtags y las menciones. Una URL suelta se queda en gris y
+// no lleva a ningún sitio —nos lo reportaron con el artículo de César San Juan—,
+// así que el pie remite al enlace de la biografía, que sí es pinchable, y deja
+// la dirección sin protocolo, más corta para quien prefiera teclearla.
+const enlace = (lang, ruta) =>
+  [T[lang].enlace, `${SITE_URL}${ruta}`.replace("https://www.", "")].join("\n");
+
 async function main() {
   const argIdioma = process.argv.find((a) => a.startsWith("--lang="))?.split("=")[1];
   const idiomas = argIdioma ? [argIdioma] : IDIOMAS;
@@ -786,7 +796,7 @@ async function main() {
           "",
           parrafos[0] ?? "",
           "",
-          `${SITE_URL}/${lang}/candidatura/${persona.slug}/`,
+          enlace(lang, `/${lang}/candidatura/${persona.slug}/`),
           "",
           HASHTAGS,
         ].join("\n"),
@@ -865,7 +875,7 @@ async function main() {
           "",
           description,
           "",
-          `${SITE_URL}/${lang}/ambitos/${key}/`,
+          enlace(lang, `/${lang}/ambitos/${key}/`),
           "",
           HASHTAGS,
         ].join("\n"),
@@ -929,7 +939,7 @@ async function main() {
           "",
           description,
           "",
-          `${SITE_URL}/${lang}/noticias/${key ?? articulo.slug}/`,
+          enlace(lang, `/${lang}/noticias/${key ?? articulo.slug}/`),
           "",
           HASHTAGS,
         ].join("\n"),
