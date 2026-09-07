@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/instagram/publicar",
+      "schedule": "30 11 * * 2,4,6"
+    }
+  ]
+}

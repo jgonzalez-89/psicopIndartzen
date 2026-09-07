@@ -89,6 +89,49 @@ Pendiente de desarrollo:
   `src/i18n/ui.ts` (`footer.aviso`, `footer.privacidad`) pero no hay página ni
   enlace en el pie.
 
+## Publicación automática en Instagram
+
+`npm run programar` monta el calendario de la campaña a partir de las piezas que
+deja `npm run instagram`: tres publicaciones por semana —martes, jueves y sábado
+a las 13:30—, alternando castellano y euskera. Deja tres cosas:
+
+| Qué | Para qué |
+| :--- | :--- |
+| `public/instagram/` | las piezas servidas por la web, con nombre de hash para que el calendario no se pueda adivinar; la API de Instagram las descarga de ahí |
+| `src/data/calendario-instagram.json` | qué se publica cada día, con su pie de foto |
+| `CALENDARIO-INSTAGRAM.md` | el mismo calendario en tabla, para leerlo |
+
+Quien publica es `src/pages/api/instagram/publicar.ts`, al que llama el cron de
+Vercel declarado en `vercel.json`. Mira si hoy toca publicar, comprueba que no
+esté ya en la cuenta —así un reintento no duplica— y lo sube. Todo ocurre en
+Vercel: no hace falta tener el ordenador encendido.
+
+El cron va en UTC, así que las publicaciones salen a las 13:30 mientras dure el
+horario de verano y a las 12:30 a partir del último domingo de octubre.
+
+### Puesta en marcha (una vez)
+
+1. En [developers.facebook.com](https://developers.facebook.com/) crear una app
+   de tipo «Business» y añadirle el producto **Instagram**, con el permiso
+   `instagram_business_content_publish`.
+2. Vincular la cuenta `@psicopindartzen` y generar un **token de larga
+   duración**. Anotar también el identificador de la cuenta.
+3. En Vercel, en *Settings → Environment Variables* del proyecto, añadir:
+   `IG_USER_ID`, `IG_ACCESS_TOKEN` y `CRON_SECRET` (este último, una cadena
+   larga cualquiera; Vercel la envía en cada llamada del cron).
+
+El token caduca a los **60 días**: hay que renovarlo y actualizar
+`IG_ACCESS_TOKEN` antes de que expire, o el publicador dejará de funcionar a
+mitad de campaña.
+
+### Comprobar que va
+
+    curl -H "Authorization: Bearer $CRON_SECRET" https://www.psicopindartzen.es/api/instagram/publicar
+
+Responde qué ha hecho: si hoy no toca, si ya estaba publicado o el identificador
+de la publicación que acaba de crear. Los días de cron, la ejecución queda en el
+registro del proyecto en Vercel.
+
 ## Materiales para Instagram
 
 `npm run instagram` compone, a partir del mismo contenido de `src/content/`, las

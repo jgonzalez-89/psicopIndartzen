@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "instagram": "node scripts/instagram.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "programar": "node scripts/programar-instagram.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.0",

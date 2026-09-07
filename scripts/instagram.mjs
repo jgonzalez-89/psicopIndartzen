@@ -778,11 +778,11 @@ async function main() {
         );
       }
 
-      pies.push(
-        [
-          `### ${n} · ${nombre} — ${cargoLang}`,
-          "",
-          `**${nombre}** · ${cargoLang}`,
+      pies.push({
+        post: `${lang}/posts/candidatura/${n}-${persona.slug}.jpg`,
+        titulo: `${n} · ${nombre} — ${cargoLang}`,
+        texto: [
+          `${nombre} · ${cargoLang}`,
           "",
           parrafos[0] ?? "",
           "",
@@ -790,7 +790,7 @@ async function main() {
           "",
           HASHTAGS,
         ].join("\n"),
-      );
+      });
     }
 
     // --- Ámbitos: publicación y portada de destacado.
@@ -857,11 +857,11 @@ async function main() {
         );
       }
 
-      pies.push(
-        [
-          `### Ámbito · ${title}`,
-          "",
-          `**${title}**`,
+      pies.push({
+        post: `${lang}/posts/ambitos/${n}-${key}.jpg`,
+        titulo: `Ámbito · ${title}`,
+        texto: [
+          title,
           "",
           description,
           "",
@@ -869,7 +869,7 @@ async function main() {
           "",
           HASHTAGS,
         ].join("\n"),
-      );
+      });
     }
 
     // --- Destacados generales.
@@ -921,21 +921,19 @@ async function main() {
           await postArticulo({ titulo: title, descripcion: description, hero, lang }),
         ),
       );
-      pies.push(
-        [
-          `### Noticia · ${title}`,
-          "",
-          `**${title}**`,
+      pies.push({
+        post: `${lang}/posts/articulos/${n}-${articulo.slug}.jpg`,
+        titulo: `Noticia · ${title} (publicado el ${new Date(pubDate).toLocaleDateString(lang === "eu" ? "eu-ES" : "es-ES")})`,
+        texto: [
+          title,
           "",
           description,
           "",
           `${SITE_URL}/${lang}/noticias/${key ?? articulo.slug}/`,
           "",
           HASHTAGS,
-          "",
-          `_Publicado el ${new Date(pubDate).toLocaleDateString(lang === "eu" ? "eu-ES" : "es-ES")}_`,
         ].join("\n"),
-      );
+      });
     }
 
     await guardar(
@@ -947,11 +945,15 @@ async function main() {
           "Textos listos para copiar en cada publicación. El orden coincide con la",
           "numeración de los archivos de `posts/`.",
           "",
-          ...pies.flatMap((p) => [p, "", "---", ""]),
+          ...pies.flatMap((p) => [`### ${p.titulo}`, "", p.texto, "", "---", ""]),
         ].join("\n"),
         "utf8",
       ),
     );
+
+    // Los mismos pies en JSON, indexados por pieza: es lo que lee el publicador
+    // automático (scripts/programar-instagram.mjs) para montar el calendario.
+    await guardar(`${lang}/pies.json`, Buffer.from(JSON.stringify(pies, null, 2), "utf8"));
   }
 
   // --- Carpeta de subida al móvil, que es donde hay que hacer las historias.

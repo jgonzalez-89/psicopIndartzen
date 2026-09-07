@@ -3,7 +3,7 @@
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, envField, fontProviders } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
@@ -16,6 +16,15 @@ export default defineConfig({
   // nativo de Vercel (308) en lugar de la página meta-refresh del i18n.
   redirects: {
     "/": "/es/",
+  },
+  // Credenciales del publicador automático de Instagram (src/pages/api/).
+  // Son secretas y se leen en tiempo de ejecución, no en el build.
+  env: {
+    schema: {
+      IG_USER_ID: envField.string({ context: "server", access: "secret", optional: true }),
+      IG_ACCESS_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      CRON_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+    },
   },
   integrations: [mdx(), sitemap({ i18n: { defaultLocale: "es", locales: { es: "es-ES", eu: "eu-ES" } } })],
   i18n: {

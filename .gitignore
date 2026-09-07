@@ -26,5 +26,7 @@ pnpm-debug.log*
 # salida local del adapter de Vercel
 .vercel/
 
-# materiales de Instagram generados por scripts/instagram.mjs
-instagram/
+# materiales de Instagram generados por scripts/instagram.mjs.
+# Con la barra inicial, solo la carpeta de la raíz: public/instagram/ y
+# src/pages/api/instagram/ sí van al repositorio.
+/instagram/
