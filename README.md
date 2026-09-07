@@ -73,7 +73,6 @@ Busca los comentarios `TODO:` en el código. En resumen:
 
 Pendiente de la candidatura:
 
-- Cargo de Marije Goikoetxea Iturregui (el resto ya están confirmados).
 - Validación de los textos de los ámbitos de Organizaciones y Deporte, redactados
   a partir de la reunión y marcados con `TODO` en `src/content/ambitos/`.
 - Datos de contacto y redes sociales (`CONTACT` en `src/consts.ts`): de momento

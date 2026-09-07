@@ -1,8 +1,8 @@
 ---
 nombre: "Marije Goikoetxea Iturregui"
 cargo:
-  es: "Pendiente de confirmar"
-  eu: "Berretsi gabe"
+  es: "Vocal"
+  eu: "Batzordekidea"
 bio:
   es:
     - "Licenciada en Psicología y Teología por la Universidad de Deusto."
