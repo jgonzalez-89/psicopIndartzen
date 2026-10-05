@@ -7,7 +7,7 @@ order: 2
 personas:
   - "rosa-perona-alvarez"
   - "inaki-garcia-maza"
-  - "aritz-uzelay-aristi"
+  - "aritz-ucelay-aristi"
   - "olaia-martin-azkorra"
   - "haidee-fernandez-pastor"
   - "teresa-casanovas-llorens"

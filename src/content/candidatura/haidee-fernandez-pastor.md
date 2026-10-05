@@ -1,8 +1,8 @@
 ---
 nombre: "Haidee Fernández Pastor"
 cargo:
-  es: "Grupo de trabajo adscrito a vocalía"
-  eu: "Batzordekidetzari atxikitako lan taldea"
+  es: "Vocal"
+  eu: "Batzordekidea"
 bio:
   es:
     - "Licenciada en Psicología por la Universidad de Deusto. Máster en Salud Mental y Terapias Psicológicas (Universidad de Deusto)."

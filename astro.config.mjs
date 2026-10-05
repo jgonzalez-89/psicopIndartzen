@@ -16,6 +16,9 @@ export default defineConfig({
   // nativo de Vercel (308) en lugar de la página meta-refresh del i18n.
   redirects: {
     "/": "/es/",
+    // El apellido de Aritz se escribía mal (Uzelay); se conservan los enlaces antiguos.
+    "/es/candidatura/aritz-uzelay-aristi": "/es/candidatura/aritz-ucelay-aristi",
+    "/eu/candidatura/aritz-uzelay-aristi": "/eu/candidatura/aritz-ucelay-aristi",
   },
   // Credenciales del publicador automático de Instagram (src/pages/api/).
   // Son secretas y se leen en tiempo de ejecución, no en el build.

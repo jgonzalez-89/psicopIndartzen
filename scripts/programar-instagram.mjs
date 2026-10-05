@@ -33,10 +33,11 @@ const DIAS = [2, 4, 6]; // martes, jueves y sábado
 const HORA = "13:30";
 const INICIO = "2026-09-08";
 
-// Ya publicadas a mano; no entran en el calendario.
+// Ya publicadas a mano; no entran en el calendario. Sin el número de orden,
+// que cambia cuando entra un artículo o una persona nueva.
 const YA_PUBLICADAS = [
-  "es/posts/candidatura/01-elena-fernandez-markaida.jpg",
-  "es/posts/articulos/01-la-psicologia-que-somos.jpg",
+  "es/posts/candidatura/elena-fernandez-markaida.jpg",
+  "es/posts/articulos/la-psicologia-que-somos.jpg",
 ];
 
 // Los ámbitos de organizaciones y deporte van al final de cada cola: sus textos
@@ -104,22 +105,41 @@ async function main() {
       await piezas(lang, "candidatura"),
       ambitos,
       await piezas(lang, "articulos"),
-    ).filter((p) => !YA_PUBLICADAS.includes(p));
+    ).filter((p) => !YA_PUBLICADAS.includes(p.replace(/\/\d+-/, "/")));
   }
 
-  // Alternar idioma publicación a publicación.
+  // Lo que ya salió se queda como estaba: misma fecha, imagen y pie.
+  const ahora = new Date();
+  const anterior = await readFile(CALENDARIO_JSON, "utf8")
+    .then((t) => JSON.parse(t).publicaciones)
+    .catch(() => []);
+  const pasadas = anterior.filter((p) => new Date(`${p.fecha}T${p.hora}`) <= ahora);
+  const clave = (lang, tipo, contenido) => `${lang}/${tipo}/${contenido}`;
+  const hechas = new Set(pasadas.map((p) => clave(p.lang, p.tipo, p.contenido)));
+  for (const lang of ["es", "eu"]) {
+    colas[lang] = colas[lang].filter((pieza) => {
+      const [, , tipo, archivo] = pieza.match(/^(\w+)\/posts\/(\w+)\/(.+)\.jpg$/);
+      return !hechas.has(clave(lang, tipo, archivo.replace(/^\d+-/, "")));
+    });
+  }
+
+  // Alternar idioma publicación a publicación, siguiendo tras la última pasada.
   const plan = [];
+  const orden = pasadas.at(-1)?.lang === "es" ? ["eu", "es"] : ["es", "eu"];
   while (colas.es.length || colas.eu.length) {
-    if (colas.es.length) plan.push(colas.es.shift());
-    if (colas.eu.length) plan.push(colas.eu.shift());
+    for (const lang of orden) if (colas[lang].length) plan.push(colas[lang].shift());
   }
 
-  await rm(PUBLICO, { recursive: true, force: true });
+  // Se borran solo las imágenes que ya no usa ninguna publicación pasada.
   await mkdir(PUBLICO, { recursive: true });
+  const conservar = new Set(pasadas.map((p) => path.basename(p.imagen)));
+  for (const f of await readdir(PUBLICO)) {
+    if (!conservar.has(f)) await rm(path.join(PUBLICO, f));
+  }
   await mkdir(path.dirname(CALENDARIO_JSON), { recursive: true });
 
-  const fechas = ranuras(plan.length);
-  const publicaciones = [];
+  const fechas = ranuras(pasadas.length + plan.length).slice(pasadas.length);
+  const publicaciones = [...pasadas];
   for (const [i, pieza] of plan.entries()) {
     const imagen = await readFile(path.join(ORIGEN, pieza));
     const hash = createHash("sha256").update(imagen).digest("hex").slice(0, 16);

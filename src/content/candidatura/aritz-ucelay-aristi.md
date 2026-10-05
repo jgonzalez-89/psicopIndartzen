@@ -1,8 +1,8 @@
 ---
-nombre: "Aritz Uzelay Aristi"
+nombre: "Aritz Ucelay Aristi"
 cargo:
-  es: "Grupo de trabajo adscrito a vocalía"
-  eu: "Batzordekidetzari atxikitako lan taldea"
+  es: "Vocal"
+  eu: "Batzordekidea"
 bio:
   es:
     - "Psicólogo Sanitario por la Universidad de Deusto. Máster en Psicoterapia Sistémica Relacional y Máster en Psicoterapia Relacional Integrativa."
@@ -12,7 +12,7 @@ bio:
     - "Osasun Psikologoa Deustuko Unibertsitatean. Psikoterapia Sistemiko Erlazionalean Masterra eta Psikoterapia Erlazional Integratzailean Masterra."
     - "Gaur egun, IIPAk egiaztatutako Psikoterapeuta Integratzaile gisa egiaztatze prozesuan."
     - "Esperientzia profesionala gizarte arloan, buruko gaixotasuna duten pertsonentzako egoitza batean eta IRSErentzat Galia programan, Genero Indarkeriako kasuetan erasotzaileekin lan egiten duena."
-image: ../../assets/candidatura/aritz-uzelay-aristi.jpg
+image: ../../assets/candidatura/aritz-ucelay-aristi.jpg
 order: 11
 featured: false
 ---
