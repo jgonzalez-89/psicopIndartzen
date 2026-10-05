@@ -38,6 +38,8 @@ const INICIO = "2026-09-08";
 const YA_PUBLICADAS = [
   "es/posts/candidatura/elena-fernandez-markaida.jpg",
   "es/posts/articulos/la-psicologia-que-somos.jpg",
+  "es/posts/articulos/vision-etica-de-la-vivienda.jpg",
+  "es/posts/articulos/la-psicologia-en-nuestras-vidas.jpg",
 ];
 
 // Los ámbitos de organizaciones y deporte van al final de cada cola: sus textos
