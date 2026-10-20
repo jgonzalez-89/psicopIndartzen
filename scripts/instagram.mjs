@@ -57,6 +57,7 @@ const T = {
     avalan: "Nos representan en este ámbito",
     continua: "sigue",
     enlace: "Entra desde el enlace de nuestra bio, o copia esta dirección:",
+    resto: "Conoce al resto de la candidatura en nuestro perfil y en el enlace de la bio.",
   },
   eu: {
     eyebrow: `HAUTAGAITZA · COP BIZKAIA ${ELECTION_YEAR}`,
@@ -68,6 +69,7 @@ const T = {
     avalan: "Arlo honetan ordezkatzen gaituzte",
     continua: "jarraitzen du",
     enlace: "Sartu gure bioko estekatik, edo kopiatu helbide hau:",
+    resto: "Ezagutu hautagaitzako gainerakoak gure profilean eta bioko estekan.",
   },
 };
 
@@ -794,9 +796,11 @@ async function main() {
         texto: [
           `${nombre} · ${cargoLang}`,
           "",
-          parrafos[0] ?? "",
+          // La trayectoria entera va en el pie: desde Instagram no se puede
+          // copiar una dirección, así que la ficha tiene que leerse sin salir.
+          parrafos.join("\n\n"),
           "",
-          enlace(lang, `/${lang}/candidatura/${persona.slug}/`),
+          T[lang].resto,
           "",
           HASHTAGS,
         ].join("\n"),
