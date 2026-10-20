@@ -58,6 +58,7 @@ const T = {
     continua: "sigue",
     enlace: "Entra desde el enlace de nuestra bio, o copia esta dirección:",
     resto: "Conoce al resto de la candidatura en nuestro perfil y en el enlace de la bio.",
+    desliza: "Desliza para leer el artículo entero.",
   },
   eu: {
     eyebrow: `HAUTAGAITZA · COP BIZKAIA ${ELECTION_YEAR}`,
@@ -70,6 +71,7 @@ const T = {
     continua: "jarraitzen du",
     enlace: "Sartu gure bioko estekatik, edo kopiatu helbide hau:",
     resto: "Ezagutu hautagaitzako gainerakoak gure profilean eta bioko estekan.",
+    desliza: "Irristatu artikulu osoa irakurtzeko.",
   },
 };
 
@@ -215,7 +217,8 @@ function paginar(parrafos, { porLinea = 45, porPagina = 18 } = {}) {
   let actual = [];
   let lineas = 0;
   for (const parrafo of parrafos) {
-    const suyas = Math.ceil(parrafo.length / porLinea) + 1; // +1 por el espacio entre párrafos
+    const texto = typeof parrafo === "string" ? parrafo : parrafo.texto;
+    const suyas = Math.ceil(texto.length / porLinea) + 1; // +1 por el espacio entre párrafos
     if (lineas + suyas > porPagina && actual.length > 0) {
       paginas.push(actual);
       actual = [];
@@ -707,6 +710,105 @@ async function postArticulo({ titulo, descripcion, hero, lang }) {
   );
 }
 
+// Medidas de las páginas de texto de los carruseles: a 36 px sobre 936 px útiles
+// caben unos 56 caracteres por línea y 20 líneas por página.
+const CARRUSEL = { porLinea: 56, porPagina: 20 };
+// Instagram admite 20 imágenes por carrusel; una es la portada.
+const MAX_PAGINAS_CARRUSEL = 19;
+
+/**
+ * Cuerpo de un artículo en párrafos para el carrusel. Cada elemento de lista va
+ * aparte y los subtítulos se marcan; un párrafo que no cabe en una página se
+ * parte por frases, porque paginar() nunca corta un párrafo.
+ */
+function parrafosDeArticulo(cuerpo) {
+  const maximo = CARRUSEL.porLinea * (CARRUSEL.porPagina - 2);
+  const salida = [];
+  for (const bloque of cuerpo.replace(/<!--[\s\S]*?-->/g, "").split(/\n{2,}/)) {
+    const lineas = bloque.trim().split("\n");
+    if (!lineas[0]) continue;
+    if (/^#{1,6}\s/.test(lineas[0])) {
+      salida.push({ texto: aTextoPlano(lineas[0]).trim(), titulo: true });
+      continue;
+    }
+    const esLista = lineas.every((l) => /^\s*([-*+]|\d+\.)\s/.test(l));
+    const piezas = esLista ? lineas : [lineas.join(" ")];
+    for (const pieza of piezas) {
+      const texto = aTextoPlano(pieza).replace(/\s+/g, " ").trim();
+      if (texto.length <= maximo) {
+        salida.push({ texto });
+        continue;
+      }
+      let trozo = "";
+      for (const frase of texto.match(/[^.!?…]+[.!?…»"]*\s*/g) ?? [texto]) {
+        if (trozo && trozo.length + frase.length > maximo) {
+          salida.push({ texto: trozo.trim() });
+          trozo = "";
+        }
+        trozo += frase;
+      }
+      if (trozo.trim()) salida.push({ texto: trozo.trim() });
+    }
+  }
+  return salida;
+}
+
+/** Página de texto del carrusel de un artículo: se lee sin salir de Instagram. */
+async function postTexto({ titulo, parrafos, pagina, paginas, lang }) {
+  const { logo } = await cargarAssets();
+  const continuacion = pagina < paginas;
+
+  return pintar(
+    el(
+      "div",
+      {
+        width: POST.w,
+        height: POST.h,
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#ffffff",
+        backgroundImage: `radial-gradient(circle at 90% 4%, ${BRAND_50} 0%, #ffffff 55%)`,
+        fontFamily: "Atkinson",
+        paddingTop: 64,
+        paddingBottom: 52,
+        paddingLeft: 72,
+        paddingRight: 72,
+      },
+      [
+        el("div", { display: "flex", alignItems: "center", justifyContent: "space-between" }, [
+          rotulo(T[lang].noticia, ORANGE_DARK, 22),
+          el("div", { fontSize: 24, fontWeight: 700, color: BRAND_400 }, `${pagina}/${paginas}`),
+        ]),
+        el(
+          "div",
+          { fontSize: 30, fontWeight: 700, color: BRAND_900, marginTop: 16, lineHeight: 1.2 },
+          titulo,
+        ),
+        el("div", { width: 90, height: 5, borderRadius: 3, backgroundColor: BRAND_100, marginTop: 24 }),
+        el(
+          "div",
+          { display: "flex", flexDirection: "column", marginTop: 30 },
+          parrafos.map((p) =>
+            p.titulo
+              ? el("div", { fontSize: 40, fontWeight: 700, color: BRAND_900, lineHeight: 1.25, marginBottom: 22 }, p.texto)
+              : el("div", { fontSize: 36, color: BRAND_700, lineHeight: 1.45, marginBottom: 26 }, p.texto),
+          ),
+        ),
+        el("div", { display: "flex", flex: 1 }),
+        el("div", { display: "flex", alignItems: "flex-end", justifyContent: "space-between" }, [
+          img(logo, { width: 240 }),
+          el(
+            "div",
+            { fontSize: 26, color: continuacion ? ORANGE_DARK : BRAND_400, fontWeight: 700 },
+            continuacion ? T[lang].continua : SITE_URL.replace("https://www.", ""),
+          ),
+        ]),
+      ],
+    ),
+    POST,
+  );
+}
+
 // ----------------------------------------------------------------- programa
 
 const HASHTAGS = "#PsiCopIndartzen #Psicologia #COPBizkaia #Bizkaia #Psikologia #Elecciones2026";
@@ -929,12 +1031,40 @@ async function main() {
       const { title, description, key, pubDate } = articulo.data;
       const hero = rutaDeclarada(articulo.file, articulo.data.heroImage);
       const n = dosDigitos(i + 1);
-      generado.push(
+      const portada = await postArticulo({ titulo: title, descripcion: description, hero, lang });
+      generado.push(await guardar(`${lang}/posts/articulos/${n}-${articulo.slug}.jpg`, portada));
+
+      // El mismo artículo como carrusel: la portada y detrás el texto entero.
+      // Desde la app no se llega a la web (las URLs del pie no se pueden pinchar
+      // ni copiar), así que el artículo tiene que poder leerse dentro.
+      const paginas = paginar(parrafosDeArticulo(articulo.cuerpo), CARRUSEL);
+      // Un subtítulo no cierra página: pasa a la siguiente, con su texto.
+      for (let j = 0; j < paginas.length - 1; j++) {
+        while (paginas[j].length > 1 && paginas[j].at(-1).titulo) {
+          paginas[j + 1].unshift(paginas[j].pop());
+        }
+      }
+      if (paginas.length > MAX_PAGINAS_CARRUSEL) {
+        avisos.push(
+          `${lang}/${articulo.slug}: ${paginas.length} páginas de texto, más de las ` +
+            `${MAX_PAGINAS_CARRUSEL} que caben en un carrusel; no se genera.`,
+        );
+      } else {
+        const carpeta = `${lang}/carruseles/${n}-${articulo.slug}`;
+        generado.push(await guardar(`${carpeta}/01-portada.jpg`, portada));
+        for (const [j, pagina] of paginas.entries()) {
+          generado.push(
+            await guardar(
+              `${carpeta}/${dosDigitos(j + 2)}-texto.jpg`,
+              await postTexto({ titulo: title, parrafos: pagina, pagina: j + 1, paginas: paginas.length, lang }),
+            ),
+          );
+        }
         await guardar(
-          `${lang}/posts/articulos/${n}-${articulo.slug}.jpg`,
-          await postArticulo({ titulo: title, descripcion: description, hero, lang }),
-        ),
-      );
+          `${carpeta}/pie.txt`,
+          Buffer.from([title, "", description, "", T[lang].desliza, "", HASHTAGS].join("\n"), "utf8"),
+        );
+      }
       pies.push({
         post: `${lang}/posts/articulos/${n}-${articulo.slug}.jpg`,
         titulo: `Noticia · ${title} (publicado el ${new Date(pubDate).toLocaleDateString(lang === "eu" ? "eu-ES" : "es-ES")})`,
@@ -1057,6 +1187,7 @@ async function main() {
     "├── posts/candidatura/   1080×1350 · una publicación por persona",
     "├── posts/ambitos/       1080×1350 · un ámbito por publicación",
     "├── posts/articulos/     1080×1350 · las noticias del blog",
+    "├── carruseles/          1080×1350 · cada noticia entera, para leerla sin salir",
     "├── stories/candidatura/ 1080×1920 · portada + trayectoria de cada persona",
     "├── stories/manifiesto/  1080×1920 · el manifiesto por entregas",
     "├── destacados/          1080×1920 · portadas de historias destacadas",

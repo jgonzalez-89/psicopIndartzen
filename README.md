@@ -143,6 +143,7 @@ por git, se rehace en cada ejecución):
 | `posts/candidatura/` | 1080×1350 | Una publicación por integrante |
 | `posts/ambitos/` | 1080×1350 | Un ámbito por publicación |
 | `posts/articulos/` | 1080×1350 | Las noticias del blog |
+| `carruseles/` | 1080×1350 | Cada noticia entera en carrusel (portada y texto), con su `pie.txt` |
 | `stories/candidatura/` | 1080×1920 | Portada y trayectoria de cada integrante |
 | `stories/manifiesto/` | 1080×1920 | El manifiesto por entregas |
 | `destacados/` | 1080×1920 | Portadas de historias destacadas |
