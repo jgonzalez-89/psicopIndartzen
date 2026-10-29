@@ -4,8 +4,8 @@ Tres por semana —martes, jueves y sábado a las 13:30—, alternando castellan
 y euskera. Lo publica solo el cron de Vercel; ver «Publicación automática» en
 el README.
 
-De la primera (2026-09-08) a la última (2026-12-12):
-42 publicaciones.
+De la primera (2026-09-08) a la última (2026-12-17):
+44 publicaciones.
 
 Generado con `node scripts/programar-instagram.mjs`; no editar a mano.
 
@@ -33,23 +33,25 @@ Generado con `node scripts/programar-instagram.mjs`; no editar a mano.
 | 20 | jueves 22 de octubre | EU | articulos | nuestros jovenes profesionales |
 | 21 | sábado 24 de octubre | ES | candidatura | teresa casanovas llorens |
 | 22 | martes 27 de octubre | EU | candidatura | rosa perona alvarez |
-| 23 | jueves 29 de octubre | ES | ambitos | educacion |
-| 24 | sábado 31 de octubre | EU | candidatura | ana aguirre |
-| 25 | martes 3 de noviembre | ES | candidatura | marije goikoetxea iturregui |
-| 26 | jueves 5 de noviembre | EU | candidatura | teresa casanovas llorens |
-| 27 | sábado 7 de noviembre | ES | candidatura | aritz ucelay aristi |
-| 28 | martes 10 de noviembre | EU | ambitos | educacion |
-| 29 | jueves 12 de noviembre | ES | candidatura | haidee fernandez pastor |
-| 30 | sábado 14 de noviembre | EU | candidatura | marije goikoetxea iturregui |
-| 31 | martes 17 de noviembre | ES | ambitos | social |
-| 32 | jueves 19 de noviembre | EU | candidatura | aritz ucelay aristi |
-| 33 | sábado 21 de noviembre | ES | ambitos | organizaciones |
-| 34 | martes 24 de noviembre | EU | candidatura | haidee fernandez pastor |
-| 35 | jueves 26 de noviembre | ES | ambitos | deporte |
-| 36 | sábado 28 de noviembre | EU | ambitos | social |
-| 37 | martes 1 de diciembre | ES | articulos | presentacion candidatura |
-| 38 | jueves 3 de diciembre | EU | ambitos | organizaciones |
-| 39 | sábado 5 de diciembre | EU | ambitos | deporte |
-| 40 | martes 8 de diciembre | EU | articulos | vision etica de la vivienda |
-| 41 | jueves 10 de diciembre | EU | articulos | la psicologia que somos |
-| 42 | sábado 12 de diciembre | EU | articulos | presentacion candidatura |
+| 23 | jueves 29 de octubre | ES | articulos | queremos escuchar para construir |
+| 24 | sábado 31 de octubre | EU | articulos | queremos escuchar para construir |
+| 25 | martes 3 de noviembre | ES | ambitos | educacion |
+| 26 | jueves 5 de noviembre | EU | candidatura | ana aguirre |
+| 27 | sábado 7 de noviembre | ES | candidatura | marije goikoetxea iturregui |
+| 28 | martes 10 de noviembre | EU | candidatura | teresa casanovas llorens |
+| 29 | jueves 12 de noviembre | ES | candidatura | aritz ucelay aristi |
+| 30 | sábado 14 de noviembre | EU | ambitos | educacion |
+| 31 | martes 17 de noviembre | ES | candidatura | haidee fernandez pastor |
+| 32 | jueves 19 de noviembre | EU | candidatura | marije goikoetxea iturregui |
+| 33 | sábado 21 de noviembre | ES | ambitos | social |
+| 34 | martes 24 de noviembre | EU | candidatura | aritz ucelay aristi |
+| 35 | jueves 26 de noviembre | ES | ambitos | organizaciones |
+| 36 | sábado 28 de noviembre | EU | candidatura | haidee fernandez pastor |
+| 37 | martes 1 de diciembre | ES | ambitos | deporte |
+| 38 | jueves 3 de diciembre | EU | ambitos | social |
+| 39 | sábado 5 de diciembre | ES | articulos | presentacion candidatura |
+| 40 | martes 8 de diciembre | EU | ambitos | organizaciones |
+| 41 | jueves 10 de diciembre | EU | ambitos | deporte |
+| 42 | sábado 12 de diciembre | EU | articulos | vision etica de la vivienda |
+| 43 | martes 15 de diciembre | EU | articulos | la psicologia que somos |
+| 44 | jueves 17 de diciembre | EU | articulos | presentacion candidatura |
