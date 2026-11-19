@@ -710,6 +710,33 @@ async function postArticulo({ titulo, descripcion, hero, lang }) {
   );
 }
 
+/**
+ * Publicación hecha con un cartel propio (una invitación, por ejemplo). Ya viene
+ * diseñado, así que no se recompone: se encaja entero en el 4:5 y los márgenes
+ * se rellenan con el mismo cartel ampliado y desenfocado, para que no queden
+ * franjas de un color plano que no casa con el diseño.
+ */
+async function postCartel(file) {
+  const original = await readFile(file);
+  const fondo = await sharp(original)
+    .resize(POST.w, POST.h, { fit: "cover" })
+    .blur(40)
+    .toBuffer();
+  const cartel = await sharp(original)
+    .resize(POST.w, POST.h, { fit: "inside", kernel: "lanczos3" })
+    .toBuffer({ resolveWithObject: true });
+  return sharp(fondo)
+    .composite([
+      {
+        input: cartel.data,
+        left: Math.round((POST.w - cartel.info.width) / 2),
+        top: Math.round((POST.h - cartel.info.height) / 2),
+      },
+    ])
+    .jpeg({ quality: 90, chromaSubsampling: "4:4:4" })
+    .toBuffer();
+}
+
 // Medidas de las páginas de texto de los carruseles: a 36 px sobre 936 px útiles
 // caben unos 56 caracteres por línea y 20 líneas por página.
 const CARRUSEL = { porLinea: 56, porPagina: 20 };
@@ -1030,14 +1057,18 @@ async function main() {
     for (const [i, articulo] of articulos.entries()) {
       const { title, description, key, pubDate } = articulo.data;
       const hero = rutaDeclarada(articulo.file, articulo.data.heroImage);
+      const cartel = rutaDeclarada(articulo.file, articulo.data.cartel);
       const n = dosDigitos(i + 1);
-      const portada = await postArticulo({ titulo: title, descripcion: description, hero, lang });
+      const portada = cartel
+        ? await postCartel(cartel)
+        : await postArticulo({ titulo: title, descripcion: description, hero, lang });
       generado.push(await guardar(`${lang}/posts/articulos/${n}-${articulo.slug}.jpg`, portada));
 
       // El mismo artículo como carrusel: la portada y detrás el texto entero.
       // Desde la app no se llega a la web (las URLs del pie no se pueden pinchar
-      // ni copiar), así que el artículo tiene que poder leerse dentro.
-      const paginas = paginar(parrafosDeArticulo(articulo.cuerpo), CARRUSEL);
+      // ni copiar), así que el artículo tiene que poder leerse dentro. Un cartel
+      // ya se lee entero en su propia imagen: no lleva carrusel.
+      const paginas = cartel ? [] : paginar(parrafosDeArticulo(articulo.cuerpo), CARRUSEL);
       // Un subtítulo no cierra página: pasa a la siguiente, con su texto.
       for (let j = 0; j < paginas.length - 1; j++) {
         while (paginas[j].length > 1 && paginas[j].at(-1).titulo) {
@@ -1049,7 +1080,7 @@ async function main() {
           `${lang}/${articulo.slug}: ${paginas.length} páginas de texto, más de las ` +
             `${MAX_PAGINAS_CARRUSEL} que caben en un carrusel; no se genera.`,
         );
-      } else {
+      } else if (!cartel) {
         const carpeta = `${lang}/carruseles/${n}-${articulo.slug}`;
         generado.push(await guardar(`${carpeta}/01-portada.jpg`, portada));
         for (const [j, pagina] of paginas.entries()) {

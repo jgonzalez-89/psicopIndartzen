@@ -69,6 +69,9 @@ const blog = defineCollection({
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       heroImage: image().optional(),
+      // Cartel propio, como una invitación: se ve entero al final de la noticia
+      // y en Instagram sustituye a la portada compuesta y al carrusel de texto.
+      cartel: image().optional(),
     }),
 });
 

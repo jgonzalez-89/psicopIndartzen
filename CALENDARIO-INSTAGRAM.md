@@ -4,8 +4,8 @@ Tres por semana —martes, jueves y sábado a las 13:30—, alternando castellan
 y euskera. Lo publica solo el cron de Vercel; ver «Publicación automática» en
 el README.
 
-De la primera (2026-09-08) a la última (2026-12-26):
-48 publicaciones.
+De la primera (2026-09-08) a la última (2027-01-05):
+52 publicaciones.
 
 Generado con `node scripts/programar-instagram.mjs`; no editar a mano.
 
@@ -43,19 +43,23 @@ Generado con `node scripts/programar-instagram.mjs`; no editar a mano.
 | 30 | sábado 14 de noviembre | EU | candidatura | teresa casanovas llorens |
 | 31 | martes 17 de noviembre | ES | articulos | una profesion muchas realidades |
 | 32 | jueves 19 de noviembre | EU | ambitos | educacion |
-| 33 | sábado 21 de noviembre | ES | candidatura | aritz ucelay aristi |
-| 34 | martes 24 de noviembre | EU | candidatura | marije goikoetxea iturregui |
-| 35 | jueves 26 de noviembre | ES | candidatura | haidee fernandez pastor |
-| 36 | sábado 28 de noviembre | EU | articulos | una profesion muchas realidades |
-| 37 | martes 1 de diciembre | ES | ambitos | social |
-| 38 | jueves 3 de diciembre | EU | candidatura | aritz ucelay aristi |
-| 39 | sábado 5 de diciembre | ES | ambitos | organizaciones |
-| 40 | martes 8 de diciembre | EU | candidatura | haidee fernandez pastor |
-| 41 | jueves 10 de diciembre | ES | ambitos | deporte |
-| 42 | sábado 12 de diciembre | EU | ambitos | social |
-| 43 | martes 15 de diciembre | ES | articulos | presentacion candidatura |
-| 44 | jueves 17 de diciembre | EU | ambitos | organizaciones |
-| 45 | sábado 19 de diciembre | EU | ambitos | deporte |
-| 46 | martes 22 de diciembre | EU | articulos | vision etica de la vivienda |
-| 47 | jueves 24 de diciembre | EU | articulos | la psicologia que somos |
-| 48 | sábado 26 de diciembre | EU | articulos | presentacion candidatura |
+| 33 | sábado 21 de noviembre | ES | articulos | ser psicologo empieza antes del titulo |
+| 34 | martes 24 de noviembre | EU | articulos | ser psicologo empieza antes del titulo |
+| 35 | jueves 26 de noviembre | ES | articulos | un espacio para encontrarnos |
+| 36 | sábado 28 de noviembre | EU | candidatura | marije goikoetxea iturregui |
+| 37 | martes 1 de diciembre | ES | candidatura | aritz ucelay aristi |
+| 38 | jueves 3 de diciembre | EU | articulos | un espacio para encontrarnos |
+| 39 | sábado 5 de diciembre | ES | candidatura | haidee fernandez pastor |
+| 40 | martes 8 de diciembre | EU | candidatura | aritz ucelay aristi |
+| 41 | jueves 10 de diciembre | ES | ambitos | social |
+| 42 | sábado 12 de diciembre | EU | candidatura | haidee fernandez pastor |
+| 43 | martes 15 de diciembre | ES | ambitos | organizaciones |
+| 44 | jueves 17 de diciembre | EU | ambitos | social |
+| 45 | sábado 19 de diciembre | ES | ambitos | deporte |
+| 46 | martes 22 de diciembre | EU | ambitos | organizaciones |
+| 47 | jueves 24 de diciembre | ES | articulos | presentacion candidatura |
+| 48 | sábado 26 de diciembre | EU | ambitos | deporte |
+| 49 | martes 29 de diciembre | EU | articulos | una profesion muchas realidades |
+| 50 | jueves 31 de diciembre | EU | articulos | vision etica de la vivienda |
+| 51 | sábado 2 de enero | EU | articulos | la psicologia que somos |
+| 52 | martes 5 de enero | EU | articulos | presentacion candidatura |
