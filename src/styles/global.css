@@ -1,5 +1,10 @@
 @import "tailwindcss";
-@plugin "daisyui";
+/* Solo el tema claro. Por defecto daisyUI activa también el oscuro cuando el
+   sistema lo pide, y como body solo mide una pantalla (h-full), por debajo
+   asomaba su fondo oscuro con el texto en los colores del tema claro. */
+@plugin "daisyui" {
+  themes: light --default;
+}
 
 /* Paleta de marca PsiCopIndartzen, tomada del logotipo.
    El isotipo combina cuatro familias: azul marino (la Ψ), azul medio y verde
